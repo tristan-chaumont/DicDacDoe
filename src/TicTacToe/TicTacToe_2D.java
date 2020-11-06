@@ -1,9 +1,13 @@
-package Morpion;
+package TicTacToe;
 
-public class Morpion_2D extends StructureMorpion{
+public class TicTacToe_2D extends StructureTicTacToe {
 
-    public Morpion_2D() {
+    public TicTacToe_2D() {
         super(16);
+    }
+
+    public TicTacToe_2D(char [] array){
+        super(array);
     }
 
 
@@ -51,5 +55,17 @@ public class Morpion_2D extends StructureMorpion{
         }
         return false;
 
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s= new StringBuilder();
+        for(int i=0;i<4;i++){
+            for(int j =0;j<4;j++){
+                s.append(cells[4 * i + j]).append(" ");
+            }
+            s.append("\n");
+        }
+        return s.toString();
     }
 }
