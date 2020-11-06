@@ -25,7 +25,7 @@ public class Main {
 
         dimension = chooseDimension();
 
-        ArrayList<Integer> tttList = new ArrayList<Integer>();
+        ArrayList<Integer> ttt = new ArrayList<Integer>();
 
         // Read file
         try {
@@ -33,19 +33,16 @@ public class Main {
             String line;
             while((line = reader.readLine()) != null) {
                 List<Integer> intLine = Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
-                tttList.addAll(intLine);
+                ttt.addAll(intLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // QUENTIN, TU UTILISES CA
-        int[] ttt = tttList.stream().mapToInt(Integer::valueOf).toArray();
-
         char [] tictactoe = new char[16];
-        int i =0;
+        int i = 0;
         for(int cell : ttt){
-            switch (cell){
+            switch (cell) {
                 case -1:
                     tictactoe[i] = ' ';
                     break;
