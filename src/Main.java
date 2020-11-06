@@ -43,8 +43,11 @@ public class Main {
 
     }
 
+    /**
+     * Ask user to write dimension he wants to use (2 or 3).
+     * @return Selected dimension.
+     */
     public static int chooseDimension() {
-        // Ask user to write dimension he wants to use (2 or 3)
         int dimension = 2;
         while(true) {
             try {
