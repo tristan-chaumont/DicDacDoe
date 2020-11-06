@@ -1,10 +1,8 @@
 package AlphaBeta;
 
-public class Leaf {
-
-    int value;
+public class Leaf extends TreeNode{
 
     public Leaf(int v){
-        value = v;
+        super(v);
     }
 }
