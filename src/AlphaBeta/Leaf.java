@@ -1,3 +1,5 @@
+package AlphaBeta;
+
 public class Leaf {
 
     int value;
