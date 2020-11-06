@@ -32,7 +32,7 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader("files/2D_Blank.txt"));
             String line;
             while((line = reader.readLine()) != null) {
-                List<Integer> intLine = Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+                List<Integer> intLine = Arrays.stream(line.split("\s")).map(Integer::parseInt).collect(Collectors.toList());
                 ttt.addAll(intLine);
             }
         } catch (IOException e) {
