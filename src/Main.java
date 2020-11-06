@@ -1,3 +1,5 @@
+import TicTacToe.TicTacToe_2D;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,6 +41,24 @@ public class Main {
 
         // QUENTIN, TU UTILISES CA
         int[] ttt = tttList.stream().mapToInt(Integer::valueOf).toArray();
+        char [] tictactoe = new char[16];
+        int i =0;
+        for(int cell : ttt){
+            switch (cell){
+                case -1:
+                    tictactoe[i] = ' ';
+                    break;
+                case 0:
+                    tictactoe[i] = 'O';
+                    break;
+                case 1:
+                    tictactoe[i] = 'X';
+                    break;
+            }
+            i++;
+        }
+        TicTacToe_2D game = new TicTacToe_2D(tictactoe);
+        System.out.println(game);
 
 
     }
