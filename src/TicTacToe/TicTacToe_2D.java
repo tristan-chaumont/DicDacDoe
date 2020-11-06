@@ -60,11 +60,14 @@ public class TicTacToe_2D extends StructureTicTacToe {
     @Override
     public String toString() {
         StringBuilder s= new StringBuilder();
+        s.append("---------\n");
         for(int i=0;i<4;i++){
+            s.append("|");
             for(int j =0;j<4;j++){
-                s.append(cells[4 * i + j]).append(" ");
+                s.append(cells[4 * i + j]).append("|");
             }
             s.append("\n");
+            s.append("---------\n");
         }
         return s.toString();
     }
