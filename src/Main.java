@@ -39,8 +39,6 @@ public class Main {
 
         // QUENTIN, TU UTILISES CA
         int[] ttt = tttList.stream().mapToInt(Integer::valueOf).toArray();
-
-
     }
 
     /**
