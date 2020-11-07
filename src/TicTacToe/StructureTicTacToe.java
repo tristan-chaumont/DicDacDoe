@@ -7,8 +7,8 @@ import java.util.stream.IntStream;
 
 public abstract class StructureTicTacToe {
 
-    char [] cells;
-    ArrayList<Integer> emptyCell;
+    protected char [] cells;
+    protected ArrayList<Integer> emptyCell;
 
     StructureTicTacToe(StructureTicTacToe another){
         this.cells = another.cells;
@@ -89,8 +89,17 @@ public abstract class StructureTicTacToe {
      * @param column numero de la colonne compris entre 1 et 4
      * @param depth profondeur du  entre 1 et 4
      */
-    protected void setCell(char value,int line,int column, int depth){
+    protected void setCell(char value, int line, int column, int depth){
         int cell = (depth-1)*16 + (line-1)*4 + column-1;
+        if(this.cells[cell] == ' ') {
+            this.cells[cell] = value;
+            emptyCell.remove(Integer.valueOf(cell));
+
+        }
+
+    }
+
+    protected void setCell(char value, int cell){
         if(this.cells[cell] == ' ') {
             this.cells[cell] = value;
             emptyCell.remove(Integer.valueOf(cell));
