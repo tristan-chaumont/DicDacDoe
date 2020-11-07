@@ -8,18 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
-    /*enum CELL {
-        BLANK,
-        X,
-        O
-    }*/
 
     public static void main(String[] args) {
-
         System.out.print("n-dimension (2 or 3): ");
         int dimension;
 

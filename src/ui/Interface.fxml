@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="parent" prefHeight="735.0" prefWidth="1300.0" styleClass="parent" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LaunchController">
+   <children>
+      <HBox fx:id="titleBar" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1300.0" styleClass="title-bar" stylesheets="@styles/style.css">
+         <children>
+            <HBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" text="DicDacDoe" textFill="#abb2bf">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <Label fx:id="minimizeButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#minimizeStage" prefHeight="30.0" prefWidth="60.0" styleClass="min-btn" stylesheets="@styles/style.css">
+               <graphic>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#c9c9c9" iconName="MINUS" size="1.3em" />
+               </graphic></Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="1275.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#closeApp" prefHeight="30.0" prefWidth="60.0" styleClass="close-btn" stylesheets="@styles/style.css">
+               <graphic>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#c9c9c9" iconName="CLOSE" size="1.3em" />
+               </graphic>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
