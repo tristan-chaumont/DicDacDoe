@@ -10,6 +10,11 @@ public abstract class StructureTicTacToe {
     char [] cells;
     ArrayList<Integer> emptyCell;
 
+    StructureTicTacToe(StructureTicTacToe another){
+        this.cells = another.cells;
+        this.emptyCell = new ArrayList<>(another.emptyCell);
+    }
+
     StructureTicTacToe(int size){
         cells = new char[size];
         Arrays.fill(cells,' ');
@@ -88,10 +93,24 @@ public abstract class StructureTicTacToe {
         int cell = (depth-1)*16 + (line-1)*4 + column-1;
         if(this.cells[cell] == ' ') {
             this.cells[cell] = value;
+            emptyCell.remove(Integer.valueOf(cell));
+
         }
+
     }
 
+    protected char getCell(int line,int column, int depth){
+        int cell = (depth-1)*16 + (line-1)*4 + column-1;
+        if(cell < cells.length) {
+            return this.cells[cell];
 
+        }
+        throw new ArrayIndexOutOfBoundsException();
 
+    }
+
+    public ArrayList<Integer> getEmptyCell() {
+        return emptyCell;
+    }
 }
 

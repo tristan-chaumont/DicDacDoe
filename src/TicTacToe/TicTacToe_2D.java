@@ -16,6 +16,11 @@ public class TicTacToe_2D extends StructureTicTacToe {
         super(array,emptyCell);
     }
 
+    public TicTacToe_2D(TicTacToe_2D another){
+        super(another);
+
+    }
+
     /**
      * methode findSolutionFromCell avec profondeur predefini pour le tictactoe 2D
      * @see #findSolutionFromCell(int, int, int)
@@ -100,5 +105,10 @@ public class TicTacToe_2D extends StructureTicTacToe {
      */
     public void setCell(char value, int line, int column){
         this.setCell(value,line,column,1);
+    }
+
+
+    public char getCell(int line, int column) {
+        return super.getCell(line, column, 1);
     }
 }
