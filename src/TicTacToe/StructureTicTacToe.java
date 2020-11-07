@@ -1,20 +1,35 @@
 package TicTacToe;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public abstract class StructureTicTacToe {
 
     char [] cells;
-
+    ArrayList<Integer> emptyCell;
 
     StructureTicTacToe(int size){
         cells = new char[size];
         Arrays.fill(cells,' ');
+        emptyCell = IntStream.range(0, 15).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 
     StructureTicTacToe(char [] array){
         cells = array;
+        for(int i = 0;i<cells.length;i++){
+            if(cells[i] == ' '){
+                emptyCell.add(i);
+            }
+        }
     }
+
+    StructureTicTacToe(char [] array,ArrayList<Integer> emptyCell){
+        cells = array;
+        this.emptyCell = new ArrayList<>(emptyCell);
+    }
+
 
     /**
      * Recherche si solution est gagnante depuis une case

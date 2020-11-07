@@ -1,5 +1,7 @@
 package TicTacToe;
 
+import java.util.ArrayList;
+
 public class TicTacToe_2D extends StructureTicTacToe {
 
     public TicTacToe_2D() {
@@ -8,6 +10,10 @@ public class TicTacToe_2D extends StructureTicTacToe {
 
     public TicTacToe_2D(char [] array){
         super(array);
+    }
+
+    public TicTacToe_2D(char [] array, ArrayList<Integer> emptyCell){
+        super(array,emptyCell);
     }
 
     /**
