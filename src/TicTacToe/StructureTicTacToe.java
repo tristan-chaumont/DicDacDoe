@@ -99,10 +99,10 @@ public abstract class StructureTicTacToe {
 
     }
 
-    protected void setCell(char value, int cell){
+    public void setCell(char value, int cell){
         if(this.cells[cell] == ' ') {
             this.cells[cell] = value;
-            emptyCell.remove(Integer.valueOf(cell));
+            emptyCell.remove(cell);
 
         }
 

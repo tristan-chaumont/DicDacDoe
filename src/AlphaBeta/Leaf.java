@@ -1,8 +1,10 @@
 package AlphaBeta;
 
+import TicTacToe.StructureTicTacToe;
+
 public class Leaf extends TreeNode{
 
-    public Leaf(int v){
-        super(v);
+    public Leaf(StructureTicTacToe s, int v){
+        super(s,v);
     }
 }
