@@ -25,33 +25,50 @@ public class Node extends TreeNode{
             beta = b;
     }
 
-    public Integer alphaBeta(){
+    public ArrayList<TreeNode> alphaBeta(){
+        ArrayList<TreeNode> path = new ArrayList<TreeNode>();
+        ArrayList<TreeNode> pathTemp = new ArrayList<TreeNode>();
         Integer val;
         if(type.equals("max")){
             for (TreeNode child: children) {
-                if(child instanceof Leaf)
+                if(child instanceof Leaf) {
                     val = child.getValue();
-                else
-                    val = ((Node)child).alphaBeta();
+                }else {
+                    pathTemp = ((Node) child).alphaBeta();
+                    val = ((Node) child).getValue();
+                }
                 if (val > alpha)
                     alpha = val;
+                    if(path.size() > 0)
+                        path.remove(0);
+                    path.add(child);
+                    if (child instanceof Node)
+                        path.addAll(pathTemp);
                 if (beta <= alpha)
                     break;
             }
         }else {
             for (TreeNode child: children) {
-                if(child instanceof Leaf)
+                if(child instanceof Leaf) {
                     val = child.getValue();
-                else
-                    val = ((Node)child).alphaBeta();
-                if (val > beta)
+                }else {
+                    pathTemp = ((Node) child).alphaBeta();
+                    val = ((Node) child).getValue();
+                }
+                if (val > beta) {
                     beta = val;
+                    if(path.size() > 0)
+                        path.remove(0);
+                    path.add(child);
+                    if (child instanceof Node)
+                        path.addAll(pathTemp);
+                }
                 if (beta <= alpha)
                     break;
             }
         }
         setValue(beta);
-        return getValue();
+        return path;
     }
 
     public void addChildren(TreeNode n){
