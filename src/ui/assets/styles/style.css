@@ -1,0 +1,80 @@
+.parent {
+    -fx-background-color: #21252b;
+    -fx-border-style: solid solid solid solid;
+    -fx-border-color: #373A40;
+}
+
+.title-bar {
+    -fx-border-style: hidden hidden solid hidden;
+    -fx-border-color: #333841;
+}
+
+.close-btn {
+    -fx-background-color: transparent;
+}
+
+.close-btn:hover {
+    -fx-background-color: #E81123;
+}
+
+.min-btn {
+    -fx-background-color: transparent;
+}
+
+.min-btn:hover {
+    -fx-background-color: #373A40;
+}
+
+.min-btn:pressed {
+    -fx-background-color: transparent;
+}
+
+/* TIC TAC TOE */
+
+.tictactoe-pane {
+    -fx-border-style: hidden solid hidden hidden;
+    -fx-border-color: #333841;
+}
+
+.titactoe-2d {
+    -fx-background-color: #21252b;
+}
+
+.tictactoe-cell {
+    -fx-border-style: solid hidden hidden solid;
+    -fx-border-color: #606368;
+    -fx-border-width: 3;
+}
+
+.tictactoe-cell.first-column {
+    -fx-border-style: solid hidden hidden hidden;
+}
+
+.tictactoe-cell.first-row {
+    -fx-border-style: hidden hidden hidden solid;
+}
+
+.tictactoe-cell.first-cell {
+    -fx-border-style: hidden;
+}
+
+/* MENU */
+
+.menu-pane {
+    -fx-background-color: #282C34;
+    -fx-border-style: hidden solid solid hidden;
+    -fx-border-color: #373A40;
+}
+
+.parameters-pane {
+    -fx-border-style: hidden hidden hidden hidden;
+    -fx-border-color: #373A40;
+    -fx-border-width: 2;
+}
+
+.information-pane {
+    -fx-background-color: #21252b;
+    -fx-border-style: hidden solid solid hidden;
+    -fx-border-color: #373A40;
+    -fx-border-width: 2;
+}
