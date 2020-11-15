@@ -1,6 +1,6 @@
-package AlphaBeta;
+package alphabeta;
 
-import TicTacToe.StructureTicTacToe;
+import tictactoe.StructureTicTacToe;
 
 public class Leaf extends TreeNode{
 

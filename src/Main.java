@@ -1,4 +1,4 @@
-import TicTacToe.TicTacToe_2D;
+import tictactoe.TicTacToe_2D;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Main {
 

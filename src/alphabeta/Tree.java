@@ -1,7 +1,6 @@
-package AlphaBeta;
+package alphabeta;
 
-import TicTacToe.StructureTicTacToe;
-import TicTacToe.TicTacToe_2D;
+import tictactoe.TicTacToe_2D;
 
 import java.util.ArrayList;
 
