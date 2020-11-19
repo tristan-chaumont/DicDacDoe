@@ -119,7 +119,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="information-scrollpane" stylesheets="@assets/styles/style.css">
+                        <ScrollPane prefHeight="391.0" prefWidth="386.0" styleClass="information-scrollpane" stylesheets="@assets/styles/style.css">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                           </content>
