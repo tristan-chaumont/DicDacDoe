@@ -31,6 +31,11 @@
 
 /* TIC TAC TOE */
 
+.tictactoe-timer {
+    -fx-border-style: hidden solid hidden hidden;
+    -fx-border-color: #333841;
+}
+
 .tictactoe-pane {
     -fx-border-style: hidden solid hidden hidden;
     -fx-border-color: #333841;
@@ -72,9 +77,46 @@
     -fx-border-width: 2;
 }
 
+.radio-button-start-with .radio {
+    -fx-border-color: #606368;
+    -fx-border-width: 2;
+    -fx-border-radius: 130px;
+    -fx-background-color: #21252b;
+}
+
+.radio-button-start-with .radio:hover {
+    -fx-border-color: #9FA1A4;
+    -fx-cursor: hand;
+}
+
+.radio-button-start-with .dot {
+    -fx-mark-highlight-color: #9FA1A4;
+    -fx-mark-color: #9FA1A4;
+}
+
+.radio-button-start-with:selected .radio {
+    -fx-border-color: #2796C4;
+}
+
+.newgame-button {
+    -fx-background-color: #2796C4DD;
+    -fx-border-radius: 10;
+}
+
+.newgame-button:hover {
+    -fx-background-color: #2796C4;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
 .information-pane {
     -fx-background-color: #21252b;
     -fx-border-style: hidden solid solid hidden;
     -fx-border-color: #373A40;
     -fx-border-width: 2;
+}
+
+.information-scrollpane {
+    -fx-background: #21252b;
+    -fx-border-color: #21252b;
 }

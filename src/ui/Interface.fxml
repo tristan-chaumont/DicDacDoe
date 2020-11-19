@@ -2,8 +2,10 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1300.0" styleClass="parent" stylesheets="@assets/styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LaunchController">
@@ -51,7 +53,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-               </children></HBox>
+               </children>
+            </HBox>
             <VBox layoutX="910.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="390.0" styleClass="menu-pane" stylesheets="@assets/styles/style.css">
                <children>
                   <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="390.0" styleClass="parameters-pane" stylesheets="@assets/styles/style.css">
@@ -64,6 +67,46 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="390.0" text="Start with:" textFill="#abb2bf">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
+                           <children>
+                              <RadioButton fx:id="radioButtonCross" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-start-with" stylesheets="@assets/styles/style.css">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <Group>
+                                 <children>
+                                    <SVGPath content="m386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z" fill="#e63946" scaleX="0.07" scaleY="0.07" />
+                                 </children>
+                              </Group>
+                              <Pane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" />
+                              <RadioButton fx:id="radioButtonCircle" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-start-with" stylesheets="@assets/styles/style.css" />
+                              <Group>
+                                 <children>
+                                    <SVGPath content="m257.778 515.556c-142.137 0-257.778-115.642-257.778-257.778s115.641-257.778 257.778-257.778 257.778 115.641 257.778 257.778-115.642 257.778-257.778 257.778zm0-451.112c-106.61 0-193.333 86.723-193.333 193.333s86.723 193.333 193.333 193.333 193.333-86.723 193.333-193.333-86.723-193.333-193.333-193.333z" fill="#ffe3a7" scaleX="0.06" scaleY="0.06" />
+                                 </children>
+                              </Group>
+                           </children></HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" styleClass="newgame-button" stylesheets="@assets/styles/style.css" text="NEW GAME" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                 </padding>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="390.0" styleClass="information-pane" stylesheets="@assets/styles/style.css">
@@ -76,6 +119,11 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="information-scrollpane" stylesheets="@assets/styles/style.css">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
                      </children>
                   </VBox>
                </children></VBox>

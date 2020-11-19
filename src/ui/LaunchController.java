@@ -5,6 +5,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -16,6 +18,8 @@ import javafx.scene.shape.SVGPath;
 import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LaunchController implements Initializable {
 
@@ -31,6 +35,15 @@ public class LaunchController implements Initializable {
     @FXML
     private GridPane tictactoe2D;
 
+    @FXML
+    private RadioButton radioButtonCross;
+
+    @FXML
+    private RadioButton radioButtonCircle;
+
+    @FXML
+    private Label timer;
+
     private double xOffSet = 0;
     private double yOffSet = 0;
 
@@ -38,6 +51,7 @@ public class LaunchController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         makeStageDraggable();
         createTictactoe2D();
+        linkRadioButtons();
     }
 
     private void makeStageDraggable() {
@@ -102,6 +116,16 @@ public class LaunchController implements Initializable {
                 tictactoe2D.add(stackPane, j, i);
             }
         }
+    }
+
+    private void linkRadioButtons() {
+        final ToggleGroup group = new ToggleGroup();
+        radioButtonCross.setToggleGroup(group);
+        radioButtonCross.setSelected(true);
+
+        radioButtonCircle.setToggleGroup(group);
+
+        System.out.println(group.getSelectedToggle());
     }
 
     private void resizeSvg(SVGPath svg, double width, double height) {
