@@ -120,3 +120,12 @@
     -fx-background: #21252b;
     -fx-border-color: #21252b;
 }
+
+.scrollpane-textarea {
+    -fx-text-box-border: transparent;
+    -fx-focus-color: #21252b;
+}
+
+.scrollpane-textarea .content {
+    -fx-background-color: transparent;
+}
