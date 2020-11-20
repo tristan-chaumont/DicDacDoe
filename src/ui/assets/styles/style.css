@@ -121,11 +121,51 @@
     -fx-border-color: #21252b;
 }
 
-.scrollpane-textarea {
-    -fx-text-box-border: transparent;
+.information-textarea {
+    -fx-text-box-border: #21252b;
     -fx-focus-color: #21252b;
+    -fx-background-insets: 2;
+    -fx-text-fill: white;
 }
 
-.scrollpane-textarea .content {
-    -fx-background-color: transparent;
+.information-textarea .scroll-pane,
+.information-textarea .scroll-pane .viewport,
+.information-textarea .scroll-pane .content {
+    -fx-background-color: #21252b;
+}
+
+.information-textarea .content:hover {
+    -fx-cursor: default;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color : #21252b;
+    -fx-border-color : #21252b;
+}
+
+
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color : transparent;
+    -fx-background-radius : 20;
+    -fx-padding : 0 5 0 0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape : " ";
+    -fx-padding :0.15em 0.0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";
+    -fx-padding :0.0 0.15em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color : #373e48;
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 20;
 }
