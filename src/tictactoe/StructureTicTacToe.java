@@ -17,12 +17,14 @@ public abstract class StructureTicTacToe {
 
     StructureTicTacToe(int size){
         cells = new char[size];
+        emptyCell = new ArrayList<>();
         Arrays.fill(cells,' ');
         emptyCell = IntStream.range(0, 15).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 
     StructureTicTacToe(char [] array){
         cells = array;
+        emptyCell = new ArrayList<>();
         for(int i = 0;i<cells.length;i++){
             if(cells[i] == ' '){
                 emptyCell.add(i);
