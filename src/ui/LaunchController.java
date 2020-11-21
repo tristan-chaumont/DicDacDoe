@@ -1,12 +1,11 @@
 package ui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -16,10 +15,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import utilities.Utilities;
 
+import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.OptionalInt;
 import java.util.ResourceBundle;
 import java.util.function.ToDoubleFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class LaunchController implements Initializable {
 
@@ -50,6 +55,9 @@ public class LaunchController implements Initializable {
     private ComboBox<String> boards;
 
     @FXML
+    private CheckBox aiStarts;
+
+    @FXML
     private TextFlow information;
 
     //endregion
@@ -75,8 +83,19 @@ public class LaunchController implements Initializable {
         linkRadioButtons();
         createTictactoe2D();
         initializeInformation();
-        boards.getItems().addAll("Empty", "Import custom board...");
-        boards.getSelectionModel().selectFirst();
+
+        dimensionGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+                    fetchBoards("2D");
+                } else {
+                    fetchBoards("3D");
+                }
+            }
+        });
+
+        fetchBoards("2D");
     }
 
     //region GESTION DE LA TITLE BAR CUSTOM
@@ -186,6 +205,25 @@ public class LaunchController implements Initializable {
         radioButton2D.setToggleGroup(dimensionGroup);
         radioButton2D.setSelected(true);
         radioButton3D.setToggleGroup(dimensionGroup);
+    }
+
+    private void fetchBoards(String dimension) {
+        if (!boards.getItems().isEmpty()) {
+            boards.getItems().clear();
+        }
+        File file = new File("files/" + dimension);
+        Utilities.fetchFiles(file, f -> boards.getItems().add(String.join(" ", f.getName().substring(0, f.getName().length() - 4).split("_"))));
+        // Trie la liste des plateaux pour que le premier plateau proposé soit le plateau vide
+        int index = IntStream.range(0, boards.getItems().size())
+                .filter(i -> boards.getItems().get(i).equals(dimension + " Empty"))
+                .findFirst().orElse(0);
+        if (index > 0) {
+            boards.getItems().add(0, boards.getItems().get(index));
+            boards.getItems().remove(index + 1);
+        }
+
+        boards.getItems().add("Import custom board...");
+        boards.getSelectionModel().selectFirst();
     }
 
     /**

@@ -119,7 +119,7 @@
                         </HBox>
                         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
                            <children>
-                              <CheckBox mnemonicParsing="false" styleClass="checkbox-custom" stylesheets="@assets/styles/style.css" text="AI starts" textFill="#abb2bf" />
+                              <CheckBox fx:id="aiStarts" mnemonicParsing="false" styleClass="checkbox-custom" stylesheets="@assets/styles/style.css" text="AI starts" textFill="#abb2bf" />
                            </children>
                            <VBox.margin>
                               <Insets top="20.0" />
