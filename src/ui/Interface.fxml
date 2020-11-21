@@ -67,34 +67,64 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="390.0" text="Start with:" textFill="#abb2bf">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin>
-                        </Label>
                         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
                            <children>
-                              <RadioButton fx:id="radioButtonCross" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-start-with" stylesheets="@assets/styles/style.css">
+                              <RadioButton fx:id="radioButtonCross" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
                               </RadioButton>
                               <Group>
                                  <children>
                                     <SVGPath content="m386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z" fill="#e63946" scaleX="0.07" scaleY="0.07" />
                                  </children>
                               </Group>
-                              <Pane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" />
-                              <RadioButton fx:id="radioButtonCircle" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-start-with" stylesheets="@assets/styles/style.css" />
+                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" />
+                              <RadioButton fx:id="radioButtonCircle" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></RadioButton>
                               <Group>
                                  <children>
                                     <SVGPath content="m257.778 515.556c-142.137 0-257.778-115.642-257.778-257.778s115.641-257.778 257.778-257.778 257.778 115.641 257.778 257.778-115.642 257.778-257.778 257.778zm0-451.112c-106.61 0-193.333 86.723-193.333 193.333s86.723 193.333 193.333 193.333 193.333-86.723 193.333-193.333-86.723-193.333-193.333-193.333z" fill="#ffe3a7" scaleX="0.06" scaleY="0.06" />
                                  </children>
                               </Group>
                            </children></HBox>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
+                           <children>
+                              <RadioButton fx:id="radioButton2D" mnemonicParsing="false" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css" text="2D" textFill="#abb2bf">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font></RadioButton>
+                              <RadioButton fx:id="radioButton3D" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css" text="3D" textFill="#abb2bf">
+                                 <padding>
+                                    <Insets left="20.0" />
+                                 </padding>
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </RadioButton>
+                              <ComboBox fx:id="boards" prefWidth="150.0" styleClass="combobox-custom" stylesheets="@assets/styles/style.css" visibleRowCount="5">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
+                           <children>
+                              <CheckBox mnemonicParsing="false" styleClass="checkbox-custom" stylesheets="@assets/styles/style.css" text="AI starts" textFill="#abb2bf" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Button mnemonicParsing="false" onMouseClicked="#handleNewGameClick" styleClass="newgame-button" stylesheets="@assets/styles/style.css" text="NEW GAME" textFill="WHITE">
@@ -119,7 +149,17 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <TextArea fx:id="information" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="384.0" styleClass="information-textarea" stylesheets="@assets/styles/style.css" />
+                        <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="384.0" styleClass="information-scrollpane" stylesheets="@assets/styles/style.css">
+                          <content>
+                              <TextFlow fx:id="information" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="367.0" styleClass="information-textflow" stylesheets="@assets/styles/style.css" />
+                          </content>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </ScrollPane>
                      </children>
                   </VBox>
                </children></VBox>

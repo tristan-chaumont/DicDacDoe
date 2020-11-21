@@ -23,7 +23,7 @@ public class Main {
 
         // Read file
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("files/2D_Blank.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("files/2D_Empty.txt"));
             String line;
             while((line = reader.readLine()) != null) {
                 List<Integer> intLine = Arrays.stream(line.trim().split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());

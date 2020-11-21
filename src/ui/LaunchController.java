@@ -3,17 +3,23 @@ package ui;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.ToDoubleFunction;
 
 public class LaunchController implements Initializable {
 
@@ -35,7 +41,16 @@ public class LaunchController implements Initializable {
     private RadioButton radioButtonCircle;
 
     @FXML
-    private TextArea information;
+    private RadioButton radioButton2D;
+
+    @FXML
+    private RadioButton radioButton3D;
+
+    @FXML
+    private ComboBox<String> boards;
+
+    @FXML
+    private TextFlow information;
 
     //endregion
 
@@ -44,9 +59,13 @@ public class LaunchController implements Initializable {
     private double xOffSet = 0;
     private double yOffSet = 0;
 
-    private final ToggleGroup radioButtonsGroup = new ToggleGroup();
+    private final ToggleGroup shapeGroup = new ToggleGroup();
+
+    private final ToggleGroup dimensionGroup = new ToggleGroup();
 
     private int currentPlayer;
+
+    private static final String LINE_SEP = System.lineSeparator();
 
     //endregion
 
@@ -55,8 +74,9 @@ public class LaunchController implements Initializable {
         makeStageDraggable();
         linkRadioButtons();
         createTictactoe2D();
-        information.setWrapText(true);
-        information.setText("Player can start");
+        initializeInformation();
+        boards.getItems().addAll("Empty", "Import custom board...");
+        boards.getSelectionModel().selectFirst();
     }
 
     //region GESTION DE LA TITLE BAR CUSTOM
@@ -109,21 +129,40 @@ public class LaunchController implements Initializable {
 
                 stackPane.setOnMouseClicked(event -> {
                     SVGPath icon = new SVGPath();
-                    // CROSS
-                    if (event.getButton() == MouseButton.PRIMARY) {
+                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0) {
+                        Text playerShape;
+                        // CROIX
                         if (currentPlayer == 0) {
                             icon.setContent("m386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z");
                             icon.setFill(Color.web("#e63946"));
                             icon.setScaleX(0.08);
                             icon.setScaleY(0.08);
+                            playerShape = new Text(LINE_SEP + "Cross");
+                            playerShape.setFill(Color.web("#e63946"));
+                        // CERCLE
                         } else {
                             icon.setContent("m257.778 515.556c-142.137 0-257.778-115.642-257.778-257.778s115.641-257.778 257.778-257.778 257.778 115.641 257.778 257.778-115.642 257.778-257.778 257.778zm0-451.112c-106.61 0-193.333 86.723-193.333 193.333s86.723 193.333 193.333 193.333 193.333-86.723 193.333-193.333-86.723-193.333-193.333-193.333z");
                             icon.setFill(Color.web("#ffe3a7"));
                             icon.setScaleX(0.07);
                             icon.setScaleY(0.07);
+                            playerShape = new Text(LINE_SEP + "Circle");
+                            playerShape.setFill(Color.web("#ffe3a7"));
                         }
+                        playerShape.setFont(Font.font("System", FontWeight.BOLD, 13));
+                        Text playerMoveStartLine = new Text(" played at line ");
+                        Text playerMoveLine = new Text(Integer.toString(finalI + 1));
+                        Text playerMoveComa = new Text(", column ");
+                        Text playerMoveColumn = new Text(Integer.toString(finalJ + 1));
+                        playerMoveStartLine.setFill(Color.web("#abb2bf"));
+                        playerMoveStartLine.setFont(Font.font(13));
+                        playerMoveLine.setFill(Color.web("#abb2bf"));
+                        playerMoveLine.setFont(Font.font("System", FontWeight.BOLD, 13));
+                        playerMoveComa.setFill(Color.web("#abb2bf"));
+                        playerMoveComa.setFont(Font.font(13));
+                        playerMoveColumn.setFill(Color.web("#abb2bf"));
+                        playerMoveColumn.setFont(Font.font("System", FontWeight.BOLD, 13));
+                        information.getChildren().addAll(playerShape, playerMoveStartLine, playerMoveLine, playerMoveComa, playerMoveColumn);
                         currentPlayer = Math.abs(currentPlayer - 1);
-                        information.setText(String.format("%s\n%s played column %d, line %d", information.getText(), currentPlayer == 1 ? "Cross" : "Circle", finalJ + 1, finalI + 1));
                     }
                     Group group = new Group(icon);
                     group.setTranslateX(2);
@@ -137,15 +176,16 @@ public class LaunchController implements Initializable {
 
     //endregion
 
-    //region FONCTIONS QUI GERENT LA FENETRE DES PARAMETRES
+    //region GESTION DE LA FENETRE DES PARAMETRES
 
     private void linkRadioButtons() {
-        radioButtonCross.setToggleGroup(radioButtonsGroup);
+        radioButtonCross.setToggleGroup(shapeGroup);
         radioButtonCross.setSelected(true);
+        radioButtonCircle.setToggleGroup(shapeGroup);
 
-        radioButtonCircle.setToggleGroup(radioButtonsGroup);
-
-        System.out.println(radioButtonsGroup.getSelectedToggle());
+        radioButton2D.setToggleGroup(dimensionGroup);
+        radioButton2D.setSelected(true);
+        radioButton3D.setToggleGroup(dimensionGroup);
     }
 
     /**
@@ -154,16 +194,35 @@ public class LaunchController implements Initializable {
      */
     @FXML
     private void handleNewGameClick(MouseEvent event) {
-        currentPlayer = radioButtonsGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
+        currentPlayer = shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
         tictactoe2D.getChildren().clear();
         createTictactoe2D();
+        information.getChildren().clear();
+        initializeInformation();
     }
 
     //endregion
 
-    //region FONCTIONS QUI GERENT LA FENETRE DES INFORMATIONS
+    //region GESTION DE LA FENETRE DES INFORMATIONS
 
-    //TODO
+    private void initializeInformation() {
+        Text player = new Text("Player ");
+        player.setFill(Color.web("#abb2bf"));
+        player.setFont(Font.font("System", FontWeight.BOLD, 13));
+        Text playerStart = new Text("starts and plays ");
+        playerStart.setFill(Color.web("#abb2bf"));
+        playerStart.setFont(Font.font(13));
+        Text playerShape;
+        if (currentPlayer == 0) {
+            playerShape = new Text("Cross");
+            playerShape.setFill(Color.web("#e63946"));
+        } else {
+            playerShape = new Text("Circle");
+            playerShape.setFill(Color.web("#ffe3a7"));
+        }
+        playerShape.setFont(Font.font("System", FontWeight.BOLD, 13));
+        information.getChildren().addAll(player, playerStart, playerShape);
+    }
 
     //endregion
 }

@@ -77,25 +77,81 @@
     -fx-border-width: 2;
 }
 
-.radio-button-start-with .radio {
+.radio-button-custom .radio {
     -fx-border-color: #606368;
     -fx-border-width: 2;
     -fx-border-radius: 130px;
     -fx-background-color: #21252b;
 }
 
-.radio-button-start-with .radio:hover {
+.radio-button-custom .radio:hover {
     -fx-border-color: #9FA1A4;
-    -fx-cursor: hand;
 }
 
-.radio-button-start-with .dot {
+.radio-button-custom .dot {
     -fx-mark-highlight-color: #9FA1A4;
     -fx-mark-color: #9FA1A4;
 }
 
-.radio-button-start-with:selected .radio {
+.radio-button-custom:selected .radio {
     -fx-border-color: #2796C4;
+}
+
+.checkbox-custom .box {
+    -fx-border-color: #606368;
+    -fx-border-width: 2px;
+    -fx-border-radius: 2px;
+    -fx-background-color: #21252b;
+}
+
+.checkbox-custom .mark {
+    -fx-shape: "M-0.25,6.083c0.843-0.758,4.583,4.833,5.75,4.833S14.5-1.5,15.917-0.917c1.292,0.532-8.75,17.083-10.5,17.083C3,16.167-1.083,6.833-0.25,6.083z";
+}
+
+.checkbox-custom .box:hover {
+    -fx-border-color: #9FA1A4;
+}
+
+.checkbox-custom:selected .box {
+    -fx-mark-highlight-color: #2796C4;
+    -fx-mark-color: #2796C4;
+    -fx-border-color: #2796C4;
+}
+
+.checkbox-custom:selected .box:hover {
+    -fx-border-color: #2796C4AA;
+}
+
+.combobox-custom {
+    -fx-background-color: #21252B;
+    -fx-background-radius: 2px;
+    -fx-border-color: #606368;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+}
+
+.combobox-custom:hover {
+    -fx-background-color: #2B2F37;
+}
+
+.combobox-custom > .arrow-button > .arrow {
+    -fx-background-color: #606368;
+}
+
+.combobox-custom .list-cell > .text {
+    -fx-fill: #ABB2BF
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #21252B;
+}
+
+.combobox-custom .list-cell:hover {
+    -fx-background-color: #2B2F37;
 }
 
 .newgame-button {
@@ -119,53 +175,42 @@
 .information-scrollpane {
     -fx-background: #21252b;
     -fx-border-color: #21252b;
-}
-
-.information-textarea {
-    -fx-text-box-border: #21252b;
     -fx-focus-color: #21252b;
-    -fx-background-insets: 2;
-    -fx-text-fill: white;
+    -fx-faint-focus-color: #21252b;
 }
 
-.information-textarea .scroll-pane,
-.information-textarea .scroll-pane .viewport,
-.information-textarea .scroll-pane .content {
+.information-textflow {
     -fx-background-color: #21252b;
-}
-
-.information-textarea .content:hover {
-    -fx-cursor: default;
+    -fx-border-color: #21252b;
 }
 
 .scroll-bar:vertical .track {
-    -fx-background-color : #21252b;
-    -fx-border-color : #21252b;
+    -fx-background-color: #21252b;
+    -fx-border-color: #21252b;
 }
-
 
 .scroll-bar:vertical .increment-button ,
 .scroll-bar:vertical .decrement-button {
-    -fx-background-color : transparent;
-    -fx-background-radius : 20;
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
     -fx-padding : 0 5 0 0;
-
 }
 
 .scroll-bar .increment-arrow,
 .scroll-bar .decrement-arrow {
-    -fx-shape : " ";
-    -fx-padding :0.15em 0.0;
+    -fx-shape: " ";
+    -fx-padding: 0.15em 0.0;
 }
+
 
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow{
-    -fx-shape : " ";
-    -fx-padding :0.0 0.15em;
+    -fx-shape: " ";
+    -fx-padding: 0.0 0.15em;
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color : #373e48;
-    -fx-background-insets : 2.0, 0.0, 0.0;
-    -fx-background-radius : 20;
+    -fx-background-color: #373e48;
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 20;
 }
