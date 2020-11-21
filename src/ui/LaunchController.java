@@ -19,11 +19,7 @@ import utilities.Utilities;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.OptionalInt;
 import java.util.ResourceBundle;
-import java.util.function.ToDoubleFunction;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class LaunchController implements Initializable {

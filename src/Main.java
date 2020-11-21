@@ -1,4 +1,5 @@
 import tictactoe.TicTacToe_2D;
+import utilities.Utilities;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,23 +20,11 @@ public class Main {
 
         dimension = chooseDimension();
 
-        ArrayList<Integer> ttt = new ArrayList<Integer>();
-
-        // Read file
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("files/2D/2D_Empty.txt"));
-            String line;
-            while((line = reader.readLine()) != null) {
-                List<Integer> intLine = Arrays.stream(line.trim().split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
-                ttt.addAll(intLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList<Integer> board = Utilities.parseBoard(2, "files/2D/2D_Empty.txt");
 
         char [] tictactoe = new char[16];
         int i = 0;
-        for(int cell : ttt){
+        for(int cell : board){
             switch (cell) {
                 case -1:
                     tictactoe[i] = ' ';
