@@ -39,10 +39,10 @@ public class Main {
             }
             i++;
         }
-        //TicTacToe_2D game = new TicTacToe_2D(tictactoe);
-        //System.out.println(game);
+        TicTacToe_2D game = new TicTacToe_2D(tictactoe);
+        System.out.println(game);
 
-        int j = 1;
+        /*int j = 1;
         ArrayList<Integer> board3D = Utilities.parseBoard(3, "files/3D/3D_Empty.txt");
         for (Integer integer : board3D) {
             System.out.print(integer + " ");
@@ -51,7 +51,7 @@ public class Main {
                 j = 0;
             }
             j+=1;
-        }
+        }*/
     }
 
     /**
