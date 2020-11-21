@@ -47,14 +47,14 @@ public class Utilities {
         }
     }
 
-    public static ArrayList<Integer> parse2DBoard(String fileName) {
-        ArrayList<Integer> board = new ArrayList<Integer>();
+    private static ArrayList<Integer> parse2DBoard(String fileName) {
+        ArrayList<Integer> board = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
-            while((line = reader.readLine()) != null) {
-                List<Integer> intLine = Arrays.stream(line.trim().split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
-                board.addAll(intLine);
+            while ((line = reader.readLine()) != null) {
+                List<Integer> intRow = Arrays.stream(line.trim().split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
+                board.addAll(intRow);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,9 +62,40 @@ public class Utilities {
         return board;
     }
 
-    public static ArrayList<Integer> parse3DBoard(String fileName) {
-        ArrayList<Integer> board = new ArrayList<Integer>();
-        //TODO
+    private static ArrayList<Integer> parse3DBoard(String fileName) {
+        ArrayList<Integer> board = new ArrayList<>();
+        int n = 4;
+        ArrayList<String> rows = new ArrayList<>();
+        // on récupère ligne par ligne
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                rows.addAll(Arrays.stream(line.split("\\s+\\|\\s+")).collect(Collectors.toList()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // on insère tout dans le bon ordre
+        // on saute n itérations dans le tableau pour récupérer la ligne qui correspond au bon étage du morpion
+        String[] rowsTab = rows.toArray(new String[0]);
+        int boardLength = (int) Math.pow(n, 2);
+        for (int i = 0; i < boardLength; i += n) {
+            List<Integer> intRow = Arrays.stream(rowsTab[i].split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
+            board.addAll(intRow);
+            // si i atteint exactement la taille du tableau, on a parcouru le morpion 3D complet, on peut donc arrêter
+            if (i == boardLength - 1) {
+                break;
+            }
+            // si on a dépassé la taille du tableau, on a fini l'étage actuel et on peut passer au suivant
+            // on doit donc incrémenter i de 1 pour récupérer le prochain étage
+            // on veut récupérer la première ligne de l'étage suivant donc on doit modulo n
+            // enfin, on retranche n car la prochaine itération du for va incrémenter i de n, ce qui nous ferait manquer une ligne
+            if (i + n >= boardLength) {
+                i = ((i + 1) % n) - n;
+            }
+        }
         return board;
     }
 }
