@@ -49,7 +49,7 @@ public abstract class StructureTicTacToe {
     }
 
     /**
-     *Recherche la solution a l'aide des corrdonnées d'une case
+     *Recherche la solution a l'aide des coordonnées d'une case
      * @param line numero de la ligne compris entre 1 et 4
      * @param column numero de la colonne compris entre 1 et 4
      * @param depth profondeur du  entre 1 et 4

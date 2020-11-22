@@ -1,15 +1,10 @@
-import com.sun.webkit.network.Util;
+import tictactoe.StructureTicTacToe;
 import tictactoe.TicTacToe_2D;
+import tictactoe.TicTacToe_3D;
 import utilities.Utilities;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -21,9 +16,9 @@ public class Main {
 
         dimension = chooseDimension();
 
-        ArrayList<Integer> board = Utilities.parseBoard(2, "files/2D/2D_Empty.txt");
+        ArrayList<Integer> board = Utilities.parseBoard(dimension, "files/3D/3D_Empty.txt");
 
-        char [] tictactoe = new char[16];
+        char [] tictactoe = new char[(int) Math.pow(4, dimension)];
         int i = 0;
         for(int cell : board){
             switch (cell) {
@@ -39,7 +34,7 @@ public class Main {
             }
             i++;
         }
-        TicTacToe_2D game = new TicTacToe_2D(tictactoe);
+        StructureTicTacToe game = new TicTacToe_3D(tictactoe);
         System.out.println(game);
 
         /*int j = 1;
@@ -59,7 +54,7 @@ public class Main {
      * @return Selected dimension.
      */
     public static int chooseDimension() {
-        int dimension = 2;
+        int dimension;
         while(true) {
             try {
                 dimension = Integer.parseInt(sc.nextLine());

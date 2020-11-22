@@ -78,6 +78,7 @@ public class Utilities {
         }
 
         // on insère tout dans le bon ordre
+        
         // on saute n itérations dans le tableau pour récupérer la ligne qui correspond au bon étage du morpion
         String[] rowsTab = rows.toArray(new String[0]);
         int boardLength = (int) Math.pow(n, 2);

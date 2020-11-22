@@ -8,17 +8,16 @@ public class TicTacToe_2D extends StructureTicTacToe {
         super(16);
     }
 
-    public TicTacToe_2D(char [] array){
+    public TicTacToe_2D(char[] array){
         super(array);
     }
 
-    public TicTacToe_2D(char [] array, ArrayList<Integer> emptyCell){
+    public TicTacToe_2D(char[] array, ArrayList<Integer> emptyCell){
         super(array,emptyCell);
     }
 
-    public TicTacToe_2D(TicTacToe_2D another){
+    public TicTacToe_2D(TicTacToe_2D another) {
         super(another);
-
     }
 
     /**
@@ -86,15 +85,15 @@ public class TicTacToe_2D extends StructureTicTacToe {
 
     @Override
     public String toString() {
-        StringBuilder s= new StringBuilder();
-        s.append("---------\n");
-        for(int i=0;i<4;i++){
-            s.append("|");
-            for(int j =0;j<4;j++){
-                s.append(cells[4 * i + j]).append("|");
+        StringBuilder s = new StringBuilder();
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                if (j != 0) {
+                    s.append("|");
+                }
+                s.append(cells[4 * i + j]);
             }
-            s.append("\n");
-            s.append("---------\n");
+            s.append(System.lineSeparator());
         }
         return s.toString();
     }
@@ -104,7 +103,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
      * @see #setCell(char, int, int ,int)
      */
     public void setCell(char value, int line, int column){
-        this.setCell(value,line,column,1);
+        this.setCell(value, line, column,1);
     }
 
 
