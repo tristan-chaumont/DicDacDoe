@@ -96,32 +96,30 @@ public abstract class StructureTicTacToe {
         if(this.cells[cell] == ' ') {
             this.cells[cell] = value;
             emptyCell.remove(Integer.valueOf(cell));
-
         }
-
     }
 
     public void setCell(char value, int cell){
         if(this.cells[cell] == ' ') {
             this.cells[cell] = value;
             emptyCell.remove(cell);
-
         }
-
     }
 
     protected char getCell(int line,int column, int depth){
         int cell = (depth-1)*16 + (line-1)*4 + column-1;
         if(cell < cells.length) {
             return this.cells[cell];
-
         }
         throw new ArrayIndexOutOfBoundsException();
-
     }
 
     public ArrayList<Integer> getEmptyCell() {
         return emptyCell;
+    }
+
+    public void setCells(char[] cells) {
+        this.cells = cells.clone();
     }
 }
 

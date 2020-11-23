@@ -107,7 +107,7 @@
                                     <Font size="11.0" />
                                  </font>
                               </RadioButton>
-                              <ComboBox fx:id="boards" prefWidth="150.0" styleClass="combobox-custom" stylesheets="@assets/styles/style.css" visibleRowCount="5">
+                              <ComboBox fx:id="comboBoxFiles" prefWidth="150.0" styleClass="combobox-custom" stylesheets="@assets/styles/style.css" visibleRowCount="5">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
