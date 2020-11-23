@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 public class Utilities {
 
+    public static final String LINE_SEPARATOR = System.lineSeparator();
+
     /**
      * Récupère le nom de tous les plateaux pour l'interface graphique.
      * @param dir
@@ -81,7 +83,7 @@ public class Utilities {
         
         // on saute n itérations dans le tableau pour récupérer la ligne qui correspond au bon étage du morpion
         String[] rowsTab = rows.toArray(new String[0]);
-        int boardLength = (int) Math.pow(n, 2);
+        int boardLength = n * n;
         for (int i = 0; i < boardLength; i += n) {
             List<Integer> intRow = Arrays.stream(rowsTab[i].split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
             board.addAll(intRow);

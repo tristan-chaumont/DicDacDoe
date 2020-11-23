@@ -69,8 +69,6 @@ public class LaunchController implements Initializable {
 
     private int currentPlayer;
 
-    private static final String LINE_SEP = System.lineSeparator();
-
     //endregion
 
     @Override
@@ -152,7 +150,7 @@ public class LaunchController implements Initializable {
                             icon.setFill(Color.web("#e63946"));
                             icon.setScaleX(0.08);
                             icon.setScaleY(0.08);
-                            playerShape = new Text(LINE_SEP + "Cross");
+                            playerShape = new Text(Utilities.LINE_SEPARATOR + "Cross");
                             playerShape.setFill(Color.web("#e63946"));
                         // CERCLE
                         } else {
@@ -160,7 +158,7 @@ public class LaunchController implements Initializable {
                             icon.setFill(Color.web("#ffe3a7"));
                             icon.setScaleX(0.07);
                             icon.setScaleY(0.07);
-                            playerShape = new Text(LINE_SEP + "Circle");
+                            playerShape = new Text(Utilities.LINE_SEPARATOR + "Circle");
                             playerShape.setFill(Color.web("#ffe3a7"));
                         }
                         playerShape.setFont(Font.font("System", FontWeight.BOLD, 13));

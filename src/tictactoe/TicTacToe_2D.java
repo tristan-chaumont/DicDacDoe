@@ -1,5 +1,7 @@
 package tictactoe;
 
+import utilities.Utilities;
+
 import java.util.ArrayList;
 
 public class TicTacToe_2D extends StructureTicTacToe {
@@ -93,7 +95,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
                 }
                 s.append(cells[4 * i + j]);
             }
-            s.append(System.lineSeparator());
+            s.append(Utilities.LINE_SEPARATOR);
         }
         return s.toString();
     }
