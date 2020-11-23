@@ -8,7 +8,7 @@ public class Node extends TreeNode{
 
     // Enfants du Nœud courant
     private ArrayList<TreeNode> children;
-    // type du niveau du nœud ( soit min soit max )
+    // type du niveau du nœud ( soit min pour 'O' soit max pour 'X')
     private String type;
     // alpha et beta ne peuvent prendre que les valeurs 0 et 1 (-1 pour victoire des cercles, 0 pour égalité, 1 pour la victoire des croix)
     private Integer alpha = Integer.MIN_VALUE,beta = Integer.MAX_VALUE;

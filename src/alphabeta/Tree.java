@@ -12,9 +12,10 @@ public class Tree {
     private int freeCells = 16;
 
     public Tree(int dim, char p){
-        root = null;
         dimension = dim;
         player = p;
+        if(player == 'X')
+        root = new Node(new TicTacToe_2D(), "max", Integer.MIN_VALUE, Integer.MAX_VALUE);
         fillTree(root);
     }
 
@@ -51,6 +52,7 @@ public class Tree {
                     currentNode.addChildren(new Leaf(newSituation,0));
                 }
             }
+            // Pour chaque case libre on crée une situation
             for (int i = 0; i < freeCells; i++){
                 newSituation = new TicTacToe_2D(situation);
                 newSituation.setCell(newPlayer,i);
@@ -71,5 +73,9 @@ public class Tree {
                 }
             }
         }
+    }
+
+    public Node getRoot() {
+        return root;
     }
 }

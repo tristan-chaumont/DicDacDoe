@@ -2,6 +2,7 @@ package tictactoe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -11,15 +12,16 @@ public abstract class StructureTicTacToe {
     protected ArrayList<Integer> emptyCell;
 
     StructureTicTacToe(StructureTicTacToe another){
-        this.cells = another.cells;
-        this.emptyCell = new ArrayList<>(another.emptyCell);
+        this.cells = Arrays.copyOf(another.cells, another.cells.length);
+        this.emptyCell = new ArrayList<>();
+        Collections.copy(another.emptyCell, this.emptyCell);
     }
 
     StructureTicTacToe(int size){
         cells = new char[size];
         emptyCell = new ArrayList<>();
         Arrays.fill(cells,' ');
-        emptyCell = IntStream.range(0, 15).boxed().collect(Collectors.toCollection(ArrayList::new));
+        emptyCell = IntStream.range(0, 16).boxed().collect(Collectors.toCollection(ArrayList::new));
     }
 
     StructureTicTacToe(char [] array){
@@ -102,7 +104,7 @@ public abstract class StructureTicTacToe {
     public void setCell(char value, int cell){
         if(this.cells[cell] == ' ') {
             this.cells[cell] = value;
-            emptyCell.remove(cell);
+            emptyCell.remove((Integer) cell);
         }
     }
 
