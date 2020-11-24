@@ -108,7 +108,6 @@ public class TicTacToe_2D extends StructureTicTacToe {
         this.setCell(value, line, column,1);
     }
 
-
     public char getCell(int line, int column) {
         return super.getCell(line, column, 1);
     }

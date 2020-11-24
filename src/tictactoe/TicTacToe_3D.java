@@ -38,6 +38,11 @@ public class TicTacToe_3D extends StructureTicTacToe {
     }
 
     @Override
+    public char getCell(int line,int column, int depth){
+        return super.getCell(line, column, depth);
+    }
+
+    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (int l = 1; l < 5; l++) {

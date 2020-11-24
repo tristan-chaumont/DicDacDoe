@@ -51,6 +51,10 @@
     -fx-border-width: 3;
 }
 
+.tictactoe-cell-stage {
+    -fx-border-width: 2;
+}
+
 .tictactoe-cell.first-column {
     -fx-border-style: solid hidden hidden hidden;
 }
@@ -61,6 +65,12 @@
 
 .tictactoe-cell.first-cell {
     -fx-border-style: hidden;
+}
+
+.separation-border {
+    -fx-border-color: #606368;
+    -fx-border-style: hidden hidden hidden solid;
+    -fx-border-width: 2;
 }
 
 /* MENU */

@@ -4,13 +4,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -40,7 +41,7 @@ public class LaunchController implements Initializable {
     private HBox titleBar;
 
     @FXML
-    private GridPane tictactoe2D;
+    private HBox boardPane;
 
     @FXML
     private RadioButton radioButtonCross;
@@ -80,11 +81,14 @@ public class LaunchController implements Initializable {
 
     private int currentPlayer;
 
+    private int currentDepth;
+
     //endregion
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         makeStageDraggable();
+        currentDepth = 1;
 
         dimensionGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -132,27 +136,55 @@ public class LaunchController implements Initializable {
 
     //region GESTION DU TICTACTOE
 
+    private Node createSpacer() {
+        final Region spacer = new Region();
+        // Make it always grow or shrink according to the available space
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        return spacer;
+    }
+
+    private void makeGridPane(GridPane gridPane, int columns, int rows, int width, int height) {
+        for (int i = 0; i < columns; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setMinWidth(width);
+            colConst.setPrefWidth(width);
+            colConst.setMaxWidth(width);
+            gridPane.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < rows; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setMinHeight(height);
+            rowConst.setPrefHeight(height);
+            rowConst.setMaxHeight(height);
+            gridPane.getRowConstraints().add(rowConst);
+        }
+    }
+
+    private void createTictactoe() {
+        if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+            createTictactoe2D();
+        } else {
+            createTictactoe3D();
+        }
+    }
+
     /**
-     * Crée l'interface du TicTacToe 2D, composé d'un GridCell et de StackPane qui vont accueillir les formes.
+     * Crée l'interface du TicTacToe 2D, composée d'un GridPane et de StackPane qui vont accueillir les formes.
      * Affecte un clickListener sur chaque StackPane pour permettre au joueur d'effectuer son coup.
      */
     private void createTictactoe2D() {
         int rows = 4, columns = 4;
 
+        GridPane board = new GridPane();
+        board.setMinSize(400, 400);
+        board.setPrefSize(400, 400);
+        board.setMaxSize(400, 400);
+
+        makeGridPane(board, columns, rows, 100, 100);
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                StackPane stackPane = new StackPane();
-                stackPane.getStyleClass().add("tictactoe-cell");
-
-                if (j == 0 && i != 0) {
-                    stackPane.getStyleClass().add("first-column");
-                }
-                if (i == 0 && j != 0) {
-                    stackPane.getStyleClass().add("first-row");
-                }
-                if (j == 0 && i == 0) {
-                    stackPane.getStyleClass().add("first-cell");
-                }
+                StackPane stackPane = makeTicTacToeCell(i, j);
 
                 char cell = ((TicTacToe_2D) ticTacToe).getCell(i + 1, j + 1);
                 if (cell == 'X') {
@@ -179,9 +211,131 @@ public class LaunchController implements Initializable {
                         stackPane.getChildren().add(icon);
                     }
                 });
-                tictactoe2D.add(stackPane, j, i);
+                board.add(stackPane, j, i);
             }
         }
+
+        boardPane.getChildren().add(board);
+    }
+
+    /**
+     * Crée l'interface du TicTacToe 3D, composée d'une VBox accueillant chaque étage et d'une HBox accueillant l'étage actuel.
+     * Affecte un clickListener sur chaque étage pour changer l'affichage du morpion actuel.
+     */
+    private void createTictactoe3D() {
+        int rows = 4, columns = 4;
+
+        // Fenêtre de tous les étages du morpion.
+        VBox stagesPane = new VBox();
+        stagesPane.setAlignment(Pos.CENTER);
+        stagesPane.setMinSize(310, 700);
+        stagesPane.setPrefSize(310, 700);
+        stagesPane.setMaxSize(310, 700);
+        stagesPane.getChildren().add(createSpacer()); // Ajoute le premier spacer
+        // Fenêtre du morpion actuel.
+        HBox currentStagePane = new HBox();
+        currentStagePane.setAlignment(Pos.CENTER);
+        currentStagePane.setMinSize(600, 620);
+        currentStagePane.setPrefSize(600, 620);
+        currentStagePane.setMaxSize(600, 620);
+
+        currentStagePane.getStyleClass().add("separation-border");
+
+        GridPane[] stages = new GridPane[4];
+        for (int i = 0; i < stages.length; i++) {
+            stages[i] = new GridPane();
+        }
+
+        GridPane currentStage = new GridPane();
+        currentStage.setMinSize(400, 400);
+        currentStage.setPrefSize(400, 400);
+        currentStage.setMaxSize(400, 400);
+
+        for (GridPane stage : stages) {
+            makeGridPane(stage, columns, rows, 30, 30);
+            stage.setMinSize(120, 120);
+            stage.setPrefSize(120, 120);
+            stage.setMaxSize(120, 120);
+        }
+
+        makeGridPane(currentStage, columns, rows, 100, 100);
+
+        // Fenêtre de tous les étages
+        for (int d = 0; d < stages.length; d++) {
+            for (int l = 0; l < rows; l++) {
+                for (int c = 0; c < columns; c++) {
+                    StackPane stackPane = makeTicTacToeCell(l, c);
+                    stackPane.getStyleClass().add("tictactoe-cell-stage");
+
+                    char cell = ((TicTacToe_3D) ticTacToe).getCell(l + 1, c + 1, (stages.length + 1) - (d + 1));
+                    if (cell == 'X') {
+                        stackPane.getChildren().add(IconsUtilities.makeGroupCross(0.024, 0.024));
+                    } else if (cell == 'O') {
+                        stackPane.getChildren().add(IconsUtilities.makeGroupCircle(0.021, 0.021));
+                    }
+
+                    stages[d].add(stackPane, c, l);
+                }
+            }
+            stagesPane.getChildren().add(stages[d]);
+            // Ajoute un spacer après l'étage
+            stagesPane.getChildren().add(createSpacer());
+
+        }
+
+        // Fenêtre de l'étage actuel
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                StackPane stackPane = makeTicTacToeCell(i, j);
+
+                char cell = ((TicTacToe_3D) ticTacToe).getCell(i + 1, j + 1, this.currentDepth);
+                if (cell == 'X') {
+                    stackPane.getChildren().add(IconsUtilities.makeGroupCross(0.08, 0.08));
+                } else if (cell == 'O') {
+                    stackPane.getChildren().add(IconsUtilities.makeGroupCircle(0.07, 0.07));
+                }
+
+                final int finalI = i;
+                final int finalJ = j;
+
+                stackPane.setOnMouseClicked(event -> {
+                    Group icon;
+                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0) {
+                        // CROIX
+                        if (currentPlayer == 0) {
+                            icon = IconsUtilities.makeGroupCross(0.08, 0.08);
+                        } else {
+                            icon = IconsUtilities.makeGroupCircle(0.07, 0.07);
+                        }
+                        writeMoveInformation(finalI, finalJ);
+                        currentPlayer = Math.abs(currentPlayer - 1);
+
+                        stackPane.getChildren().add(icon);
+                    }
+                });
+                currentStage.add(stackPane, j, i);
+            }
+        }
+
+        currentStagePane.getChildren().add(currentStage);
+
+        boardPane.getChildren().addAll(stagesPane, currentStagePane);
+    }
+
+    private StackPane makeTicTacToeCell(int i, int j) {
+        StackPane stackPane = new StackPane();
+        stackPane.getStyleClass().add("tictactoe-cell");
+
+        if (j == 0 && i != 0) {
+            stackPane.getStyleClass().add("first-column");
+        }
+        if (i == 0 && j != 0) {
+            stackPane.getStyleClass().add("first-row");
+        }
+        if (j == 0 && i == 0) {
+            stackPane.getStyleClass().add("first-cell");
+        }
+        return stackPane;
     }
 
     /**
@@ -273,8 +427,8 @@ public class LaunchController implements Initializable {
         currentPlayer = shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
         // Parse le plateau et crée le tableau de Cells.
         initializeTicTacToe();
-        tictactoe2D.getChildren().clear();
-        createTictactoe2D();
+        boardPane.getChildren().clear();
+        createTictactoe();
         information.getChildren().clear();
         initializeInformation();
     }
@@ -318,7 +472,7 @@ public class LaunchController implements Initializable {
         // CROIX
         if (currentPlayer == 0) {
             playerShape = new Text(Utilities.LINE_SEPARATOR + "Cross");
-            playerShape.setFill(Color.web(ColorsUtilities.YELLOW));
+            playerShape.setFill(Color.web(ColorsUtilities.RED));
             // CERCLE
         } else {
             playerShape = new Text(Utilities.LINE_SEPARATOR + "Circle");
