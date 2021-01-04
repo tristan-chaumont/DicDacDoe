@@ -19,7 +19,7 @@ public class Tree {
         fillTree(root);
     }
 
-    public void fillTree(Node cn){
+    public TreeNode fillTree(Node cn){
         Node currentNode = cn;
         if(dimension == 2){
             if(root == null){
@@ -61,18 +61,32 @@ public class Tree {
                         currentNode.addChildren(new Leaf(newSituation,1));
                     else
                         currentNode.addChildren(new Leaf(newSituation,-1));
-                    if(newPlayer == player)
-                        break;
                 }
                 currentNode.addChildren(new Node(newSituation, newType, Integer.MIN_VALUE, Integer.MAX_VALUE));
             }
             freeCells--;
             for (TreeNode child: currentNode.getChildren()) {
                 if(child instanceof Node){
-                    fillTree((Node)child);
+                    TreeNode currentChild = fillTree((Node)child);
+                    // Faire l'alpha beta
+                    int valChild = currentChild.getValue();
+                    if(currentNode.getType().equals("max")) {
+                        if(valChild > currentNode.getAlpha()){
+                            currentNode.setAlpha(valChild);
+                        }
+                    }else{
+                        if(valChild < currentNode.getBeta()){
+                            currentNode.setBeta(valChild);
+                        }
+                    }
+                    if(currentNode.getAlpha() > currentNode.getBeta()){
+                        currentNode.setValue(valChild);
+                        break;
+                    }
                 }
             }
         }
+        return currentNode;
     }
 
     public Node getRoot() {

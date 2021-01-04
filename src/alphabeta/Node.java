@@ -83,6 +83,10 @@ public class Node extends TreeNode{
         beta = b;
     }
 
+    public int getAlpha(){ return alpha;}
+
+    public int getBeta(){ return beta;}
+    
     public String getType(){
         return type;
     }
