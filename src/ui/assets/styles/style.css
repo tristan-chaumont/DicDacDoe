@@ -31,11 +31,6 @@
 
 /* TIC TAC TOE */
 
-.tictactoe-timer {
-    -fx-border-style: hidden solid hidden hidden;
-    -fx-border-color: #333841;
-}
-
 .tictactoe-pane {
     -fx-border-style: hidden solid hidden hidden;
     -fx-border-color: #333841;
@@ -53,6 +48,21 @@
 
 .tictactoe-cell-stage {
     -fx-border-width: 2;
+}
+
+.tictactoe-stage-0:hover .tictactoe-stage-cells-0,
+.tictactoe-stage-1:hover .tictactoe-stage-cells-1,
+.tictactoe-stage-2:hover .tictactoe-stage-cells-2,
+.tictactoe-stage-3:hover .tictactoe-stage-cells-3 {
+    -fx-border-color: #2796C4;
+    -fx-cursor: hand;
+}
+
+.tictactoe-stage-selected-0 .tictactoe-stage-cells-0,
+.tictactoe-stage-selected-1 .tictactoe-stage-cells-1,
+.tictactoe-stage-selected-2 .tictactoe-stage-cells-2,
+.tictactoe-stage-selected-3 .tictactoe-stage-cells-3 {
+    -fx-border-color: #2796C4;
 }
 
 .tictactoe-cell.first-column {

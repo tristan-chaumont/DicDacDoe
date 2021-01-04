@@ -12,6 +12,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -26,6 +27,7 @@ import utilities.Utilities;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
@@ -82,6 +84,14 @@ public class LaunchController implements Initializable {
     private int currentPlayer;
 
     private int currentDepth;
+
+    private GridPane[] stages;
+
+    private GridPane currentStage;
+
+    private boolean[] stagesSelected;
+
+    private int rows = 4, columns = 4;
 
     //endregion
 
@@ -143,7 +153,7 @@ public class LaunchController implements Initializable {
         return spacer;
     }
 
-    private void makeGridPane(GridPane gridPane, int columns, int rows, int width, int height) {
+    private void makeGridPane(GridPane gridPane, int width, int height) {
         for (int i = 0; i < columns; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
             colConst.setMinWidth(width);
@@ -173,14 +183,12 @@ public class LaunchController implements Initializable {
      * Affecte un clickListener sur chaque StackPane pour permettre au joueur d'effectuer son coup.
      */
     private void createTictactoe2D() {
-        int rows = 4, columns = 4;
-
         GridPane board = new GridPane();
         board.setMinSize(400, 400);
         board.setPrefSize(400, 400);
         board.setMaxSize(400, 400);
 
-        makeGridPane(board, columns, rows, 100, 100);
+        makeGridPane(board, 100, 100);
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -223,8 +231,6 @@ public class LaunchController implements Initializable {
      * Affecte un clickListener sur chaque étage pour changer l'affichage du morpion actuel.
      */
     private void createTictactoe3D() {
-        int rows = 4, columns = 4;
-
         // Fenêtre de tous les étages du morpion.
         VBox stagesPane = new VBox();
         stagesPane.setAlignment(Pos.CENTER);
@@ -241,31 +247,33 @@ public class LaunchController implements Initializable {
 
         currentStagePane.getStyleClass().add("separation-border");
 
-        GridPane[] stages = new GridPane[4];
+        stages = new GridPane[4];
         for (int i = 0; i < stages.length; i++) {
             stages[i] = new GridPane();
         }
 
-        GridPane currentStage = new GridPane();
+        currentStage = new GridPane();
         currentStage.setMinSize(400, 400);
         currentStage.setPrefSize(400, 400);
         currentStage.setMaxSize(400, 400);
 
         for (GridPane stage : stages) {
-            makeGridPane(stage, columns, rows, 30, 30);
+            makeGridPane(stage, 30, 30);
             stage.setMinSize(120, 120);
             stage.setPrefSize(120, 120);
             stage.setMaxSize(120, 120);
         }
 
-        makeGridPane(currentStage, columns, rows, 100, 100);
+        makeGridPane(currentStage, 100, 100);
 
         // Fenêtre de tous les étages
         for (int d = 0; d < stages.length; d++) {
+            stages[d].getStyleClass().add("tictactoe-stage-" + d);
             for (int l = 0; l < rows; l++) {
                 for (int c = 0; c < columns; c++) {
                     StackPane stackPane = makeTicTacToeCell(l, c);
                     stackPane.getStyleClass().add("tictactoe-cell-stage");
+                    stackPane.getStyleClass().add("tictactoe-stage-cells-" + d);
 
                     char cell = ((TicTacToe_3D) ticTacToe).getCell(l + 1, c + 1, (stages.length + 1) - (d + 1));
                     if (cell == 'X') {
@@ -277,45 +285,31 @@ public class LaunchController implements Initializable {
                     stages[d].add(stackPane, c, l);
                 }
             }
+            final int depth = d;
+            // On change la couleur des bordures du morpion sélectionné actuellement
+            stages[d].setOnMouseClicked(event -> {
+                if (!stagesSelected[depth]) {
+                    stages[depth].getStyleClass().add("tictactoe-stage-selected-" + depth);
+                    for (int i = 0; i < stagesSelected.length; i++) {
+                        if (stagesSelected[i]) {
+                            stages[i].getStyleClass().remove("tictactoe-stage-selected-" + i);
+                        }
+                        stagesSelected[i] = false;
+                    }
+                    stagesSelected[depth] = true;
+                    currentDepth = (stages.length + 1) - (depth + 1);
+                    displayCurrentStage(depth);
+                }
+            });
             stagesPane.getChildren().add(stages[d]);
             // Ajoute un spacer après l'étage
             stagesPane.getChildren().add(createSpacer());
-
         }
+        // Le premier étage est sélectionné
+        stages[3].getStyleClass().add("tictactoe-stage-selected-3");
 
-        // Fenêtre de l'étage actuel
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                StackPane stackPane = makeTicTacToeCell(i, j);
-
-                char cell = ((TicTacToe_3D) ticTacToe).getCell(i + 1, j + 1, this.currentDepth);
-                if (cell == 'X') {
-                    stackPane.getChildren().add(IconsUtilities.makeGroupCross(0.08, 0.08));
-                } else if (cell == 'O') {
-                    stackPane.getChildren().add(IconsUtilities.makeGroupCircle(0.07, 0.07));
-                }
-
-                final int finalI = i;
-                final int finalJ = j;
-
-                stackPane.setOnMouseClicked(event -> {
-                    Group icon;
-                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0) {
-                        // CROIX
-                        if (currentPlayer == 0) {
-                            icon = IconsUtilities.makeGroupCross(0.08, 0.08);
-                        } else {
-                            icon = IconsUtilities.makeGroupCircle(0.07, 0.07);
-                        }
-                        writeMoveInformation(finalI, finalJ);
-                        currentPlayer = Math.abs(currentPlayer - 1);
-
-                        stackPane.getChildren().add(icon);
-                    }
-                });
-                currentStage.add(stackPane, j, i);
-            }
-        }
+        // Fenêtre de l'étage actuelle
+        addCellOnRightStage();
 
         currentStagePane.getChildren().add(currentStage);
 
@@ -354,6 +348,7 @@ public class LaunchController implements Initializable {
             ticTacToe = new TicTacToe_3D();
             boardList = Utilities.parseBoard(3, files.get(comboBoxFiles.getValue()).getPath());
             boardArray = new char[(int) Math.pow(4, 3)];
+            stagesSelected = new boolean[]{false, false, false, true};
         }
 
         for (int i = 0; i < boardList.size(); i++) {
@@ -371,6 +366,62 @@ public class LaunchController implements Initializable {
         }
 
         ticTacToe.setCells(boardArray);
+    }
+
+    private void addCellOnLeftStage(Group icon, int row, int column) {
+        ((StackPane) stages[(stages.length + 1) - (this.currentDepth + 1)].getChildren().get(column + (row * 4))).getChildren().add(icon);
+        if (((SVGPath) icon.getChildren().get(0)).getContent().equals("m386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z")) {
+            ticTacToe.setCell('X', row + 1, column + 1, currentDepth);
+        } else {
+            ticTacToe.setCell('O', row + 1, column + 1, currentDepth);
+        }
+    }
+
+    private void addCellOnRightStage() {
+        // Fenêtre de l'étage actuel
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                StackPane stackPane = makeTicTacToeCell(i, j);
+
+                char cell = ((TicTacToe_3D) ticTacToe).getCell(i + 1, j + 1, this.currentDepth);
+                if (cell == 'X') {
+                    stackPane.getChildren().add(IconsUtilities.makeGroupCross(0.08, 0.08));
+                } else if (cell == 'O') {
+                    stackPane.getChildren().add(IconsUtilities.makeGroupCircle(0.07, 0.07));
+                }
+
+                final int finalI = i;
+                final int finalJ = j;
+
+                stackPane.setOnMouseClicked(event -> {
+                    Group rightIcon;
+                    Group leftIcon;
+                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0) {
+                        // CROIX ou CERCLE
+                        if (currentPlayer == 0) {
+                            rightIcon = IconsUtilities.makeGroupCross(0.08, 0.08);
+                            leftIcon = IconsUtilities.makeGroupCross(0.024, 0.024);
+                        } else {
+                            rightIcon = IconsUtilities.makeGroupCircle(0.07, 0.07);
+                            leftIcon = IconsUtilities.makeGroupCircle(0.021, 0.021);
+                        }
+
+                        addCellOnLeftStage(leftIcon, finalI, finalJ);
+
+                        writeMoveInformation(finalI, finalJ);
+                        currentPlayer = Math.abs(currentPlayer - 1);
+
+                        stackPane.getChildren().add(rightIcon);
+                    }
+                });
+                currentStage.add(stackPane, j, i);
+            }
+        }
+    }
+
+    private void displayCurrentStage(int depthClicked) {
+        currentStage.getChildren().clear();
+        addCellOnRightStage();
     }
 
     //endregion
@@ -424,6 +475,7 @@ public class LaunchController implements Initializable {
      */
     @FXML
     private void handleNewGameClick(MouseEvent event) {
+        currentDepth = 1;
         currentPlayer = shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
         // Parse le plateau et crée le tableau de Cells.
         initializeTicTacToe();
@@ -481,17 +533,27 @@ public class LaunchController implements Initializable {
         playerShape.setFont(Font.font("System", FontWeight.BOLD, 13));
         Text playerMoveStartLine = new Text(" played at line ");
         Text playerMoveLine = new Text(Integer.toString(line + 1));
-        Text playerMoveComa = new Text(", column ");
+        Text playerMoveComaColumn = new Text(", column ");
         Text playerMoveColumn = new Text(Integer.toString(column + 1));
+        Text playerMoveComaDepth = new Text(", depth ");
+        Text playerMoveDepth = new Text(Integer.toString(currentDepth));
         playerMoveStartLine.setFill(Color.web(ColorsUtilities.GREY));
         playerMoveStartLine.setFont(Font.font(13));
         playerMoveLine.setFill(Color.web(ColorsUtilities.GREY));
         playerMoveLine.setFont(Font.font("System", FontWeight.BOLD, 13));
-        playerMoveComa.setFill(Color.web(ColorsUtilities.GREY));
-        playerMoveComa.setFont(Font.font(13));
+        playerMoveComaColumn.setFill(Color.web(ColorsUtilities.GREY));
+        playerMoveComaColumn.setFont(Font.font(13));
         playerMoveColumn.setFill(Color.web(ColorsUtilities.GREY));
         playerMoveColumn.setFont(Font.font("System", FontWeight.BOLD, 13));
-        information.getChildren().addAll(playerShape, playerMoveStartLine, playerMoveLine, playerMoveComa, playerMoveColumn);
+        playerMoveComaDepth.setFill(Color.web(ColorsUtilities.GREY));
+        playerMoveComaDepth.setFont(Font.font(13));
+        playerMoveDepth.setFill(Color.web(ColorsUtilities.GREY));
+        playerMoveDepth.setFont(Font.font("System", FontWeight.BOLD, 13));
+        if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+            information.getChildren().addAll(playerShape, playerMoveStartLine, playerMoveLine, playerMoveComaColumn, playerMoveColumn);
+        } else {
+            information.getChildren().addAll(playerShape, playerMoveStartLine, playerMoveLine, playerMoveComaColumn, playerMoveColumn, playerMoveComaDepth, playerMoveDepth);
+        }
     }
 
     //endregion
