@@ -137,5 +137,9 @@ public abstract class StructureTicTacToe {
     public int hashCode() {
         return Arrays.hashCode(cells);
     }
+
+    public char[] getCells() {
+        return cells;
+    }
 }
 

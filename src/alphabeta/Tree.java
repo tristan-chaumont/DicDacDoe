@@ -4,6 +4,7 @@ import tictactoe.StructureTicTacToe;
 import tictactoe.TicTacToe_2D;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Tree {
@@ -12,12 +13,12 @@ public class Tree {
     private int dimension;
     private char player;
     private int freeCells;
-    private HashSet<StructureTicTacToe> duplicate;
+    private HashMap<StructureTicTacToe,TreeNode> duplicate;
     static int total = 0;
 
     public Tree(int dim, char p){
         dimension = dim;
-        duplicate = new HashSet<>();
+        duplicate = new HashMap<>();
         player = p;
         freeCells = (int) Math.pow(4, dimension);
         if(player == 'X')
@@ -64,18 +65,31 @@ public class Tree {
                     newSituation = new TicTacToe_2D(situation);
                     int pos = emptyCells.get(i);
                     newSituation.setCell(newPlayer, pos);
-                    //if (!(this.duplicate.contains(newSituation))) {
+                    if (!(this.duplicate.containsKey(newSituation))) {
+                        TreeNode t;
                         if (newSituation.findSolutionFromCell(pos)) {
-                            if (newPlayer == 'X')
-                                currentNode.addChildren(new Leaf(newSituation, 1));
-                            else
-                                currentNode.addChildren(new Leaf(newSituation, -1));
+
+                            if (newPlayer == 'X') {
+                                t = new Leaf(newSituation, 1);
+                            }
+                            else {
+                                t =new Leaf(newSituation, -1);
+                            }
                             if (newPlayer == player)
                                 break;
                         }
-                        currentNode.addChildren(new Node(newSituation, newType, Integer.MIN_VALUE, Integer.MAX_VALUE));
-                        //this.duplicate.add(newSituation);
-                   // }
+                        else {
+                            t =new Node(newSituation, newType, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                        }
+                        currentNode.addChildren(t);
+                        this.duplicate.put(newSituation,t);
+
+                   }
+                    else{
+                        TreeNode  t = duplicate.get(newSituation);
+                        t.setDuplicate(true);
+                        currentNode.addChildren(t);
+                    }
                 }
             }
             total += currentNode.getChildren().size();
