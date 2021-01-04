@@ -48,8 +48,9 @@ public class Tree {
             }
             if(tmpfreecell == 1){
                 newSituation = new TicTacToe_2D(situation);
-                newSituation.setCell(newPlayer,0);
-                if(newSituation.findSolutionFromCell(emptyCells.get(0))) {
+                int pos = emptyCells.get(0);
+                newSituation.setCell(newPlayer, pos);
+                if(newSituation.findSolutionFromCell(pos)) {
                     if(newPlayer == 'X')
                         currentNode.addChildren(new Leaf(newSituation,1));
                     else
@@ -57,45 +58,78 @@ public class Tree {
                 }else{
                     currentNode.addChildren(new Leaf(newSituation,0));
                 }
-            }
-            // Pour chaque case libre on crée une situation
-            for (int i = 0; i < tmpfreecell; i++){
-                newSituation = new TicTacToe_2D(situation);
-                int pos = emptyCells.get(i);
-                newSituation.setCell(newPlayer,pos);
-                if(!(this.duplicate.contains(newSituation))){
-                    if (newSituation.findSolutionFromCell(pos)) {
-                        if (newPlayer == 'X')
-                            currentNode.addChildren(new Leaf(newSituation, 1));
-                        else
-                            currentNode.addChildren(new Leaf(newSituation, -1));
-                        if (newPlayer == player)
-                            break;
-                    }
-                    currentNode.addChildren(new Node(newSituation, newType, Integer.MIN_VALUE, Integer.MAX_VALUE));
-                    this.duplicate.add(newSituation);
+            }else {
+                // Pour chaque case libre on crée une situation
+                for (int i = 0; i < tmpfreecell; i++) {
+                    newSituation = new TicTacToe_2D(situation);
+                    int pos = emptyCells.get(i);
+                    newSituation.setCell(newPlayer, pos);
+                    //if (!(this.duplicate.contains(newSituation))) {
+                        if (newSituation.findSolutionFromCell(pos)) {
+                            if (newPlayer == 'X')
+                                currentNode.addChildren(new Leaf(newSituation, 1));
+                            else
+                                currentNode.addChildren(new Leaf(newSituation, -1));
+                            if (newPlayer == player)
+                                break;
+                        }
+                        currentNode.addChildren(new Node(newSituation, newType, Integer.MIN_VALUE, Integer.MAX_VALUE));
+                        //this.duplicate.add(newSituation);
+                   // }
                 }
             }
-            //total += currentNode.getChildren().size();
-            //System.out.println(total);
+            total += currentNode.getChildren().size();
+            System.out.println(total);
             tmpfreecell--;
             for (TreeNode child: currentNode.getChildren()) {
+                if(child instanceof Leaf){
+                    TreeNode currentChild = child;
+                    try{
+                        int valChild = currentChild.getValue();
+
+                        if(currentNode.getType().equals("max")) {
+                            if(valChild > currentNode.getAlpha()){
+                                currentNode.setAlpha(valChild);
+                                currentNode.setValue(valChild);
+                            }
+                        }else{
+                            if(valChild < currentNode.getBeta()){
+                                currentNode.setBeta(valChild);
+                                currentNode.setValue(valChild);
+                            }
+                        }
+
+                        if(currentNode.getAlpha() > currentNode.getBeta()){
+                            break;
+                        }
+                    }catch (Exception e){
+                        e.getStackTrace();
+                    }
+                }
                 if(child instanceof Node){
                     TreeNode currentChild = fillTree((Node)child,tmpfreecell);
                     // Faire l'alpha beta
-                    int valChild = currentChild.getValue();
+                    try{
+                        int valChild = currentChild.getValue();
+
+
                     if(currentNode.getType().equals("max")) {
                         if(valChild > currentNode.getAlpha()){
                             currentNode.setAlpha(valChild);
+                            currentNode.setValue(valChild);
                         }
                     }else{
                         if(valChild < currentNode.getBeta()){
                             currentNode.setBeta(valChild);
+                            currentNode.setValue(valChild);
                         }
                     }
+
                     if(currentNode.getAlpha() > currentNode.getBeta()){
-                        currentNode.setValue(valChild);
                         break;
+                    }
+                    }catch (Exception e){
+                        e.getStackTrace();
                     }
                 }
             }
