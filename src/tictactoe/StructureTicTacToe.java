@@ -3,6 +3,7 @@ package tictactoe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -13,8 +14,7 @@ public abstract class StructureTicTacToe {
 
     StructureTicTacToe(StructureTicTacToe another){
         this.cells = Arrays.copyOf(another.cells, another.cells.length);
-        this.emptyCell = new ArrayList<>();
-        Collections.copy(another.emptyCell, this.emptyCell);
+        this.emptyCell = new ArrayList<>(another.getEmptyCell());
     }
 
     StructureTicTacToe(int size){
@@ -122,6 +122,20 @@ public abstract class StructureTicTacToe {
 
     public void setCells(char[] cells) {
         this.cells = cells.clone();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StructureTicTacToe that = (StructureTicTacToe) o;
+        return Arrays.equals(cells, that.cells);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(cells);
     }
 }
 
