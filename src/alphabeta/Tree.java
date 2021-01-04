@@ -51,13 +51,23 @@ public class Tree {
                 newSituation = new TicTacToe_2D(situation);
                 int pos = emptyCells.get(0);
                 newSituation.setCell(newPlayer, pos);
-                if(newSituation.findSolutionFromCell(pos)) {
-                    if(newPlayer == 'X')
-                        currentNode.addChildren(new Leaf(newSituation,1));
-                    else
-                        currentNode.addChildren(new Leaf(newSituation,-1));
-                }else{
-                    currentNode.addChildren(new Leaf(newSituation,0));
+                if (!(this.duplicate.containsKey(newSituation))) {
+                    TreeNode t;
+                    if (newSituation.findSolutionFromCell(pos)) {
+                        if (newPlayer == 'X')
+                            t = new Leaf(newSituation, 1);
+                        else
+                            t = new Leaf(newSituation, -1);
+                    } else {
+                        t = new Leaf(newSituation, 0);
+                    }
+                    currentNode.addChildren(t);
+                    this.duplicate.put(newSituation,t);
+                }
+                else{
+                    TreeNode  t = duplicate.get(newSituation);
+                    t.setDuplicate(true);
+                    currentNode.addChildren(t);
                 }
             }else {
                 // Pour chaque case libre on crée une situation
