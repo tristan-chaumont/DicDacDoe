@@ -24,7 +24,7 @@ public class Main {
 
         dimension = chooseDimension();
 
-        ArrayList<Integer> board = Utilities.parseBoard(dimension, "files/3D/3D_Empty.txt");
+        ArrayList<Integer> board = Utilities.parseBoard(dimension, "files/2D/2D_Empty.txt");
 
         char [] tictactoe = new char[(int) Math.pow(4, dimension)];
         int i = 0;
