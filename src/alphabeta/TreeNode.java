@@ -10,6 +10,7 @@ public class TreeNode {
     private Integer value;
     private StructureTicTacToe situation;
     private boolean duplicate;
+    private int pos;
 
 
 
@@ -49,5 +50,13 @@ public class TreeNode {
 
     public void setDuplicate(boolean duplicate) {
         this.duplicate = duplicate;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
+
+    public int getPos() {
+        return pos;
     }
 }

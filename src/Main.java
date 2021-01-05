@@ -24,7 +24,7 @@ public class Main {
 
         dimension = chooseDimension();
 
-        ArrayList<Integer> board = Utilities.parseBoard(dimension, "files/2D/2D_Test.txt");
+        ArrayList<Integer> board = Utilities.parseBoard(dimension, "files/2D/2D_Empty.txt");
 
         char [] tictactoe = new char[(int) Math.pow(4, dimension)];
         int i = 0;
@@ -44,7 +44,24 @@ public class Main {
         }
         TicTacToe_2D game = new TicTacToe_2D(tictactoe);
         System.out.println(game.heuristicEval());
+
         Tree tree = new Tree(2,'X');
+
+        game.setCell('X',tree.nextStep());
+
+        tree = new Tree(2,'O',game);
+        game.setCell('O',tree.nextStep());
+        tree = new Tree(2,'X',game);
+        game.setCell('X',tree.nextStep());
+        tree = new Tree(2,'O',game);
+        game.setCell('O',tree.nextStep());
+        tree = new Tree(2,'X',game);
+        game.setCell('X',tree.nextStep());
+        tree = new Tree(2,'O',game);
+        game.setCell('O',tree.nextStep());
+        tree = new Tree(2,'X',game);
+        game.setCell('X',tree.nextStep());
+
         System.out.println(tree.getRoot().getValue());
         // Test de Tristan
         //System.out.println(game);

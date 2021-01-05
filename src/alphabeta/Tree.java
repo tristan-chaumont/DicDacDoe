@@ -23,9 +23,26 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
-        maxDepth = 11;
+        maxDepth = 8;
         if(player == 'X');
         root = new Node(new TicTacToe_2D(), "max");
+        /*if(dimension == 2)
+            fillTree(root,16);
+        else
+            fillTree(root,64);*/
+        alphabeta2D(root,Integer.MIN_VALUE, Integer.MAX_VALUE,1);
+    }
+
+    public Tree(int dim, char p,StructureTicTacToe sttt){
+        dimension = dim;
+        duplicate = new HashMap<>();
+        player = p;
+        maxDepth = 8;
+        if(player == 'X') {
+            root = new Node(new TicTacToe_2D((TicTacToe_2D) sttt), "max");
+        }
+        else{
+        root = new Node(new TicTacToe_2D((TicTacToe_2D) sttt), "min");}
         /*if(dimension == 2)
             fillTree(root,16);
         else
@@ -71,10 +88,12 @@ public class Tree {
                     //Sinon on applique la récursivité
                     else if(size != 1){
                         t = new Node(newSituation, "max");
+
                     }
                     else{
                         t = new Leaf(newSituation, 0);
                     }
+                    t.setPos(pos);
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
                     v = Math.min(v,alphabeta2D(t,alpha,beta,depth+1));
@@ -111,6 +130,7 @@ public class Tree {
                     else{
                         t = new Leaf(newSituation, 0);
                     }
+                    t.setPos(pos);
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
                     v = Math.max(v,alphabeta2D(t,alpha,beta,depth+1));
@@ -265,6 +285,18 @@ public class Tree {
             //tmpfreecell--;
         }
     }*/
+
+    public int nextStep(){
+        int val = root.getValue();
+        for(TreeNode t : root.getChildren()){
+            if (t.getValue() == val){
+                return t.getPos();
+            }
+        }
+        return -1;
+    }
+
+
 
     public Node getRoot() {
         return root;
