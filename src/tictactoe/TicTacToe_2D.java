@@ -140,7 +140,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
                 eval += heuristic[nbX];
             }
             else if (nbO > 0 && nbX == 0 ){
-                eval += heuristic[nbO];
+                eval -= heuristic[nbO];
             }
             nbX = 0;
             nbO = 0;
@@ -157,7 +157,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
                 eval += heuristic[nbX];
             }
             else if (nbO > 0 && nbX == 0 ){
-                eval += heuristic[nbO];
+                eval -= heuristic[nbO];
             }
             nbX = 0;
             nbO = 0;
@@ -175,7 +175,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
             eval += heuristic[nbX];
         }
         else if (nbO > 0 && nbX == 0 ){
-            eval += heuristic[nbO];
+            eval -= heuristic[nbO];
         }
         nbX = 0;
         nbO = 0;
@@ -190,7 +190,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
             eval += heuristic[nbX];
         }
         else if (nbO > 0 && nbX == 0 ){
-            eval += heuristic[nbO];
+            eval -= heuristic[nbO];
         }
         return eval;
     }

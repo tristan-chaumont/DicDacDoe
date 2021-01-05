@@ -61,8 +61,8 @@ public class Tree {
                     //Si c'est la somution on crée une feuille
                     TreeNode t;
                     if(newSituation.findSolutionFromCell(pos) || depth == maxDepth){
-                        int val = -newSituation.heuristicEval();
-                        System.out.println(val);
+                        int val = newSituation.heuristicEval();
+                        //System.out.println(val);
                         t = new Leaf(newSituation,val);
                     }
                     //Sinon on applique la récursivité
@@ -97,7 +97,7 @@ public class Tree {
                     TreeNode t;
                     if(newSituation.findSolutionFromCell(pos) || depth == maxDepth){
                         int val = newSituation.heuristicEval();
-                        System.out.println(val);
+                        //System.out.println(val);
                         t = new Leaf(newSituation,val);
                     }
                     //Sinon on applique la récursivité
