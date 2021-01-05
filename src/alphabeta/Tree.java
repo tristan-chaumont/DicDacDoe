@@ -22,11 +22,12 @@ public class Tree {
         player = p;
         //freeCells = (int) Math.pow(4, dimension);
         if(player == 'X')
-        root = new Node(new TicTacToe_2D(), "max", Integer.MIN_VALUE, Integer.MAX_VALUE);
+        root = new Node(new TicTacToe_2D(), "max");
         /*if(dimension == 2)
             fillTree(root,16);
         else
             fillTree(root,64);*/
+        alphabeta2D(root,Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     public int alphabeta2D(TreeNode cn,int alpha,int beta){
@@ -38,25 +39,35 @@ public class Tree {
             //On veut savoir le nombre de case vide
             ArrayList<Integer> emptyCells = cn.getSituation().getEmptyCell();
             int size = emptyCells.size();
+
+
+
             //On veut connaître le joueur actuel
                 //Si joueur est min ( cercle )
             if(((Node)cn).getType().equals("min")) {
                 //On veut créer tous les fils sauf si condition alpha >= beta validée
                 v = Integer.MAX_VALUE;
+                if(size == 1) {
+
+                }
                 for (int i = 0; i < size; i++) {
                     //Création de la nouvelle situation
                     int pos = emptyCells.get(i);
                     TicTacToe_2D newSituation = new TicTacToe_2D((TicTacToe_2D)cn.getSituation());
                     newSituation.setCell('O',pos);
+
                     //On regarde si elle est solution
                     //Si c'est la somution on crée une feuille
                     TreeNode t;
                     if(newSituation.findSolutionFromCell(pos)){
-                        t = new Leaf(newSituation,1);
+                        t = new Leaf(newSituation,-1);
                     }
                     //Sinon on applique la récursivité
+                    else if(size != 1){
+                        t = new Node(newSituation, "max");
+                    }
                     else{
-                        t = new Node(newSituation, "min");
+                        t = new Leaf(newSituation, 0);
                     }
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
@@ -82,11 +93,14 @@ public class Tree {
                     //Si c'est la solution on crée une feuille
                     TreeNode t;
                     if(newSituation.findSolutionFromCell(pos)){
-                        t = new Leaf(newSituation,-1);
+                        t = new Leaf(newSituation,1);
                     }
                     //Sinon on applique la récursivité
-                    else{
+                    else if(size != 1){
                         t = new Node(newSituation, "min");
+                    }
+                    else{
+                        t = new Leaf(newSituation, 0);
                     }
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
