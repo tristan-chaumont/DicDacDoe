@@ -25,50 +25,10 @@ public class Node extends TreeNode{
             beta = b;
     }
 
-    public ArrayList<TreeNode> alphaBeta(){
-        ArrayList<TreeNode> path = new ArrayList<TreeNode>();
-        ArrayList<TreeNode> pathTemp = new ArrayList<TreeNode>();
-        Integer val;
-        if(type.equals("max")){
-            for (TreeNode child: children) {
-                if(child instanceof Leaf) {
-                    val = child.getValue();
-                }else {
-                    pathTemp = ((Node) child).alphaBeta();
-                    val = ((Node) child).getValue();
-                }
-                if (val > alpha)
-                    alpha = val;
-                    if(path.size() > 0)
-                        path.remove(0);
-                    path.add(child);
-                    if (child instanceof Node)
-                        path.addAll(pathTemp);
-                if (beta <= alpha)
-                    break;
-            }
-        }else {
-            for (TreeNode child: children) {
-                if(child instanceof Leaf) {
-                    val = child.getValue();
-                }else {
-                    pathTemp = ((Node) child).alphaBeta();
-                    val = ((Node) child).getValue();
-                }
-                if (val > beta) {
-                    beta = val;
-                    if(path.size() > 0)
-                        path.remove(0);
-                    path.add(child);
-                    if (child instanceof Node)
-                        path.addAll(pathTemp);
-                }
-                if (beta <= alpha)
-                    break;
-            }
-        }
-        setValue(beta);
-        return path;
+    public Node(StructureTicTacToe s, String t){
+        super(s);
+        children = new ArrayList<TreeNode>();
+        type = t;
     }
 
     public void addChildren(TreeNode n){
@@ -86,7 +46,7 @@ public class Node extends TreeNode{
     public int getAlpha(){ return alpha;}
 
     public int getBeta(){ return beta;}
-    
+
     public String getType(){
         return type;
     }
