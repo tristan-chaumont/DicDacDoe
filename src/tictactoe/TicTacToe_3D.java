@@ -24,16 +24,61 @@ public class TicTacToe_3D extends StructureTicTacToe {
 
     @Override
     public boolean solutionLine(int cell, char state) {
-        return false;
+        // trouve la case du debut de la ligne
+        int begin = cell - cell%4;
+        // parcours de la ligne
+        for(int i = begin;i<begin+4;i++){
+            if (this.cells[i] != state){
+                clearWinningCells();
+                return false;
+            }
+            setWinningCell(i);
+        }
+        return true;
     }
 
     @Override
     public boolean solutionColumn(int cell, char state) {
-        return false;
+        //haut de la colonne
+        int begin = cell%4;
+        //parcours de la colonne
+        for(int i = begin;i<16;i=i+4){
+            if (this.cells[i] != state) {
+                clearWinningCells();
+                return false;
+            }
+            setWinningCell(i);
+        }
+        return true;
     }
 
     @Override
     public boolean solutionDiagonal(int cell, char state) {
+        //verifie si il fait partie de la diagonale haut gauche a bas droite
+        if(cell%5 == 0){
+            //parcours de cette diagonale
+            for(int i =0;i<16;i=i+5){
+                if (this.cells[i] != state){
+                    clearWinningCells();
+                    return false;
+                }
+                setWinningCell(i);
+            }
+            return true;
+        }
+        //verifie si il fait partie de la diagonale haut droite a bas gauche
+        else if(cell%3 == 0){
+            //parcours de cette diagonale
+            for(int i =3;i<13;i=i+3){
+                if (this.cells[i] != state){
+                    clearWinningCells();
+                    return false;
+                }
+                setWinningCell(i);
+            }
+            return true;
+        }
+        //si il ne fait pas partie d'une de ces 2 diagonales retoune zero
         return false;
     }
 

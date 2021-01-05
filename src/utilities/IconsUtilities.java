@@ -34,6 +34,26 @@ public class IconsUtilities {
         return group;
     }
 
+    public static Group makeGroupCross(double scaleX, double scaleY, String color) {
+        return getGroup(scaleX, scaleY, color, svgCross);
+    }
+
+    public static Group makeGroupCircle(double scaleX, double scaleY, String color) {
+        return getGroup(scaleX, scaleY, color, svgCircle);
+    }
+
+    private static Group getGroup(double scaleX, double scaleY, String color, String svgCross) {
+        SVGPath icon = new SVGPath();
+        icon.setContent(svgCross);
+        icon.setFill(Color.web(color));
+        icon.setScaleX(scaleX);
+        icon.setScaleY(scaleY);
+        Group group = new Group(icon);
+        group.setTranslateX(2);
+        group.setTranslateY(2);
+        return group;
+    }
+
     public static SVGPath makeCross(double scaleX, double scaleY) {
         SVGPath icon = new SVGPath();
         icon.setContent(svgCross);

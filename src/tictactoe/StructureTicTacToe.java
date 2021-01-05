@@ -11,10 +11,12 @@ public abstract class StructureTicTacToe {
 
     protected char [] cells;
     protected ArrayList<Integer> emptyCell;
+    protected ArrayList<Integer> winningCells;
 
     StructureTicTacToe(StructureTicTacToe another){
         this.cells = Arrays.copyOf(another.cells, another.cells.length);
         this.emptyCell = new ArrayList<>(another.getEmptyCell());
+        this.winningCells = new ArrayList<>(another.getWinningCells());
     }
 
     StructureTicTacToe(int size){
@@ -22,11 +24,13 @@ public abstract class StructureTicTacToe {
         emptyCell = new ArrayList<>();
         Arrays.fill(cells,' ');
         emptyCell = IntStream.range(0, 16).boxed().collect(Collectors.toCollection(ArrayList::new));
+        winningCells = new ArrayList<>();
     }
 
     StructureTicTacToe(char [] array){
         cells = array;
         emptyCell = new ArrayList<>();
+        winningCells = new ArrayList<>();
         for(int i = 0;i<cells.length;i++){
             if(cells[i] == ' '){
                 emptyCell.add(i);
@@ -37,6 +41,7 @@ public abstract class StructureTicTacToe {
     StructureTicTacToe(char [] array,ArrayList<Integer> emptyCell){
         cells = array;
         this.emptyCell = new ArrayList<>(emptyCell);
+        winningCells = new ArrayList<>();
     }
 
 
@@ -57,7 +62,7 @@ public abstract class StructureTicTacToe {
      * @param depth profondeur du  entre 1 et 4
      * @see #findSolutionFromCell(int)
      */
-    protected boolean findSolutionFromCell(int line,int column, int depth) {
+    protected boolean findSolutionFromCell(int line, int column, int depth) {
         int cell = (depth - 1) * 16 + (line - 1) * 4 + column - 1;
         return this.findSolutionFromCell(cell);
     }
@@ -118,6 +123,18 @@ public abstract class StructureTicTacToe {
 
     public ArrayList<Integer> getEmptyCell() {
         return emptyCell;
+    }
+
+    public void clearWinningCells() {
+        winningCells.clear();
+    }
+
+    public void setWinningCell(Integer cell) {
+        this.winningCells.add(cell);
+    }
+
+    public ArrayList<Integer> getWinningCells() {
+        return winningCells;
     }
 
     public void setCells(char[] cells) {
