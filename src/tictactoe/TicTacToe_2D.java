@@ -39,8 +39,10 @@ public class TicTacToe_2D extends StructureTicTacToe {
         // parcours de la ligne
         for(int i = begin;i<begin+4;i++){
             if (this.cells[i] != state){
+                clearWinningCells();
                 return false;
             }
+            setWinningCell(i);
         }
         return true;
     }
@@ -51,9 +53,11 @@ public class TicTacToe_2D extends StructureTicTacToe {
         int begin = cell%4;
         //parcours de la colonne
         for(int i = begin;i<16;i=i+4){
-            if (this.cells[i] != state){
+            if (this.cells[i] != state) {
+                clearWinningCells();
                 return false;
             }
+            setWinningCell(i);
         }
         return true;
     }
@@ -65,9 +69,10 @@ public class TicTacToe_2D extends StructureTicTacToe {
             //parcours de cette diagonale
             for(int i =0;i<16;i=i+5){
                 if (this.cells[i] != state){
+                    clearWinningCells();
                     return false;
                 }
-
+                setWinningCell(i);
             }
             return true;
         }
@@ -76,15 +81,15 @@ public class TicTacToe_2D extends StructureTicTacToe {
             //parcours de cette diagonale
             for(int i =3;i<13;i=i+3){
                 if (this.cells[i] != state){
+                    clearWinningCells();
                     return false;
                 }
-
+                setWinningCell(i);
             }
             return true;
         }
         //si il ne fait pas partie d'une de ces 2 diagonales retoune zero
         return false;
-
     }
 
     @Override

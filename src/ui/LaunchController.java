@@ -22,6 +22,7 @@ import tictactoe.TicTacToe_2D;
 import tictactoe.TicTacToe_3D;
 import utilities.ColorsUtilities;
 import utilities.IconsUtilities;
+import utilities.TicTacTocUtilities;
 import utilities.Utilities;
 
 import java.io.File;
@@ -93,12 +94,13 @@ public class LaunchController implements Initializable {
 
     private int rows = 4, columns = 4;
 
+    private boolean gameOver;
+
     //endregion
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         makeStageDraggable();
-        currentDepth = 1;
 
         dimensionGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -183,12 +185,12 @@ public class LaunchController implements Initializable {
      * Affecte un clickListener sur chaque StackPane pour permettre au joueur d'effectuer son coup.
      */
     private void createTictactoe2D() {
-        GridPane board = new GridPane();
-        board.setMinSize(400, 400);
-        board.setPrefSize(400, 400);
-        board.setMaxSize(400, 400);
+        currentStage = new GridPane();
+        currentStage.setMinSize(400, 400);
+        currentStage.setPrefSize(400, 400);
+        currentStage.setMaxSize(400, 400);
 
-        makeGridPane(board, 100, 100);
+        makeGridPane(currentStage, 100, 100);
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -206,24 +208,28 @@ public class LaunchController implements Initializable {
 
                 stackPane.setOnMouseClicked(event -> {
                     Group icon;
-                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0) {
+                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver) {
                         // CROIX
                         if (currentPlayer == 0) {
                             icon = IconsUtilities.makeGroupCross(0.08, 0.08);
+                            ((TicTacToe_2D) ticTacToe).setCell('X', finalI + 1, finalJ + 1);
                         } else {
                             icon = IconsUtilities.makeGroupCircle(0.07, 0.07);
+                            ((TicTacToe_2D) ticTacToe).setCell('O', finalI + 1, finalJ + 1);
                         }
                         writeMoveInformation(finalI, finalJ);
                         currentPlayer = Math.abs(currentPlayer - 1);
-
                         stackPane.getChildren().add(icon);
+
+                        // On vérifie si c'est un coup gagnant, auquel cas on stoppe la partie
+                        handleWinningState(finalI + 1, finalJ + 1);
                     }
                 });
-                board.add(stackPane, j, i);
+                currentStage.add(stackPane, j, i);
             }
         }
 
-        boardPane.getChildren().add(board);
+        boardPane.getChildren().add(currentStage);
     }
 
     /**
@@ -336,6 +342,8 @@ public class LaunchController implements Initializable {
      * Initialise la structure du TicTacToe en fonction de la dimension choisie.
      */
     public void initializeTicTacToe() {
+        gameOver = false;
+        currentDepth = 1;
         ArrayList<Integer> boardList;
         char[] boardArray;
 
@@ -424,6 +432,37 @@ public class LaunchController implements Initializable {
         addCellOnRightStage();
     }
 
+    private void handleWinningState(int row, int column) {
+        boolean won = ((TicTacToe_2D) ticTacToe).findSolutionFromCell(row, column);
+        if (won) {
+            gameOver = true;
+            makeWinningScreen();
+        }
+    }
+
+    private void makeWinningScreen() {
+        ticTacToe.getWinningCells().forEach(c -> {
+            String[] pos = TicTacTocUtilities.getCellPos(c).split(",");
+            int row = Integer.parseInt(pos[0]);
+            int column = Integer.parseInt(pos[1]);
+            int depth = Integer.parseInt(pos[2]);
+            Group icon;
+            if (currentPlayer == 0) {
+                icon = IconsUtilities.makeGroupCircle(0.07, 0.07, ColorsUtilities.GREEN);
+            } else {
+                icon = IconsUtilities.makeGroupCross(0.08, 0.08, ColorsUtilities.GREEN);
+            }
+            if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+                ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().clear();
+                ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().add(icon);
+            } else {
+                ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().clear();
+                ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().add(icon);
+            }
+        });
+        writeWinningState();
+    }
+
     //endregion
 
     //region GESTION DE LA FENETRE DES PARAMETRES
@@ -475,7 +514,6 @@ public class LaunchController implements Initializable {
      */
     @FXML
     private void handleNewGameClick(MouseEvent event) {
-        currentDepth = 1;
         currentPlayer = shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
         // Parse le plateau et crée le tableau de Cells.
         initializeTicTacToe();
@@ -554,6 +592,16 @@ public class LaunchController implements Initializable {
         } else {
             information.getChildren().addAll(playerShape, playerMoveStartLine, playerMoveLine, playerMoveComaColumn, playerMoveColumn, playerMoveComaDepth, playerMoveDepth);
         }
+    }
+
+    private void writeWinningState() {
+        Text player = new Text(Utilities.LINE_SEPARATOR + "Player ");
+        player.setFill(Color.web(ColorsUtilities.GREY));
+        player.setFont(Font.font("System", FontWeight.BOLD, 13));
+        Text winner = new Text("wins the game!");
+        winner.setFill(Color.web(ColorsUtilities.GREEN));
+        winner.setFont(Font.font("System", FontWeight.BOLD, 13));
+        information.getChildren().addAll(player, winner);
     }
 
     //endregion
