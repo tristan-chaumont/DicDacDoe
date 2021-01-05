@@ -129,7 +129,7 @@ public class TicTacToe_2D extends StructureTicTacToe {
 
         // parcours de la ligne
         for(int i = 0;i<4;i++) {
-            for (int j = 4 * i; j < i + 4; j++) {
+            for (int j = 4 * i; j < i*4 + 4; j++) {
                 if (this.cells[j] == x) {
                     nbX++;
                 }else if (this.cells[j] == o) {
@@ -193,6 +193,10 @@ public class TicTacToe_2D extends StructureTicTacToe {
             eval -= heuristic[nbO];
         }
         return eval;
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }
