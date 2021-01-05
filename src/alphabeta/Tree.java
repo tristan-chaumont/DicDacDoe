@@ -27,10 +27,11 @@ public class Tree {
             fillTree(root,16);
         else
             fillTree(root,64);*/
-        alphabeta2D(root,Integer.MIN_VALUE, Integer.MAX_VALUE);
+        alphabeta2D(root,Integer.MIN_VALUE, Integer.MAX_VALUE,1);
     }
 
-    public int alphabeta2D(TreeNode cn,int alpha,int beta){
+    public int alphabeta2D(TreeNode cn,int alpha,int beta,int depth){
+        System.out.println(depth);
         int v;
         //On test si le fils est une feuille
         if(cn instanceof Leaf){
@@ -71,7 +72,7 @@ public class Tree {
                     }
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
-                    v = Math.min(v,alphabeta2D(t,alpha,beta));
+                    v = Math.min(v,alphabeta2D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
                     if(alpha >= v){
                         return v;
@@ -104,7 +105,7 @@ public class Tree {
                     }
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
-                    v = Math.max(v,alphabeta2D(t,alpha,beta));
+                    v = Math.max(v,alphabeta2D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
                     if(v >= beta){
                         return v;
