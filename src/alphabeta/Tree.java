@@ -12,10 +12,12 @@ public class Tree {
     private Node root;
     private int dimension;
     private char player;
-    private  int maxDepth = 11;
+    private  int maxDepth;
     //private int freeCells;
     private HashMap<StructureTicTacToe,TreeNode> duplicate;
     static int total = 0;
+    private static ArrayList<TreeNode> path = new ArrayList<>();
+    private static ArrayList<TreeNode> actualPath = new ArrayList<>();
 
     public Tree(int dim, char p){
         dimension = dim;
@@ -35,6 +37,7 @@ public class Tree {
         int v;
         //On test si le fils est une feuille
         if(cn instanceof Leaf){
+            //path.add(cn);
             return cn.getValue();
         }else {
             //On veut savoir le nombre de case vide
@@ -77,6 +80,7 @@ public class Tree {
                     v = Math.min(v,alphabeta2D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
                     if(alpha >= v){
+                        cn.setValue(v);
                         return v;
                     }
                     //Sinon on met v dans beta
@@ -112,13 +116,14 @@ public class Tree {
                     v = Math.max(v,alphabeta2D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
                     if(v >= beta){
+                        cn.setValue(v);
                         return v;
                     }
                     //Sinon on met v dans alpha
                     alpha = Math.max(alpha,v);
                 }
             }
-            // On retourne la valeur
+            cn.setValue(v);
             return v;
         }
     }
