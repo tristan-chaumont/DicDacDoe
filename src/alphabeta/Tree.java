@@ -12,6 +12,7 @@ public class Tree {
     private Node root;
     private int dimension;
     private char player;
+    private  int maxDepth = 11;
     //private int freeCells;
     private HashMap<StructureTicTacToe,TreeNode> duplicate;
     static int total = 0;
@@ -20,8 +21,8 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
-        //freeCells = (int) Math.pow(4, dimension);
-        if(player == 'X')
+        maxDepth = 11;
+        if(player == 'X');
         root = new Node(new TicTacToe_2D(), "max");
         /*if(dimension == 2)
             fillTree(root,16);
@@ -31,7 +32,6 @@ public class Tree {
     }
 
     public int alphabeta2D(TreeNode cn,int alpha,int beta,int depth){
-        System.out.println(depth);
         int v;
         //On test si le fils est une feuille
         if(cn instanceof Leaf){
@@ -60,8 +60,10 @@ public class Tree {
                     //On regarde si elle est solution
                     //Si c'est la somution on crée une feuille
                     TreeNode t;
-                    if(newSituation.findSolutionFromCell(pos)){
-                        t = new Leaf(newSituation,-1);
+                    if(newSituation.findSolutionFromCell(pos) || depth == maxDepth){
+                        int val = -newSituation.heuristicEval();
+                        System.out.println(val);
+                        t = new Leaf(newSituation,val);
                     }
                     //Sinon on applique la récursivité
                     else if(size != 1){
@@ -93,8 +95,10 @@ public class Tree {
                     //On regarde si elle est solution
                     //Si c'est la solution on crée une feuille
                     TreeNode t;
-                    if(newSituation.findSolutionFromCell(pos)){
-                        t = new Leaf(newSituation,1);
+                    if(newSituation.findSolutionFromCell(pos) || depth == maxDepth){
+                        int val = newSituation.heuristicEval();
+                        System.out.println(val);
+                        t = new Leaf(newSituation,val);
                     }
                     //Sinon on applique la récursivité
                     else if(size != 1){

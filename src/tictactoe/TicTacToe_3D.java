@@ -43,6 +43,11 @@ public class TicTacToe_3D extends StructureTicTacToe {
     }
 
     @Override
+    public int heuristicEval() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (int l = 1; l < 5; l++) {

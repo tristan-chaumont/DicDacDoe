@@ -141,5 +141,7 @@ public abstract class StructureTicTacToe {
     public char[] getCells() {
         return cells;
     }
+
+    public abstract int heuristicEval();
 }
 

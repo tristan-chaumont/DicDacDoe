@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class TicTacToe_2D extends StructureTicTacToe {
 
+    private static int[]  heuristic = {0,1,3,7,9999};
+
     public TicTacToe_2D() {
         super(16);
     }
@@ -112,5 +114,80 @@ public class TicTacToe_2D extends StructureTicTacToe {
         return super.getCell(line, column, 1);
     }
 
+    @Override
+    public int heuristicEval() {
+        char x = 'X';
+        char o = 'O';
+        int eval = 0;
+        int nbO = 0;
+        int nbX =0;
+
+        // parcours de la ligne
+        for(int i = 0;i<4;i++) {
+            for (int j = 4 * i; j < i + 4; j++) {
+                if (this.cells[j] == x) {
+                    nbX++;
+                }else if (this.cells[j] == o) {
+                    nbO++;
+                }
+            }
+            if (nbX > 0 && nbO == 0 ){
+                eval += heuristic[nbX];
+            }
+            else if (nbO > 0 && nbX == 0 ){
+                eval += heuristic[nbO];
+            }
+            nbX = 0;
+            nbO = 0;
+        }
+        for(int i = 0;i<4;i++) {
+            for (int j = i; j < 16; j=j+4) {
+                if (this.cells[j] == x) {
+                    nbX++;
+                }else if (this.cells[j] == o) {
+                    nbO++;
+                }
+            }
+            if (nbX > 0 && nbO == 0 ){
+                eval += heuristic[nbX];
+            }
+            else if (nbO > 0 && nbX == 0 ){
+                eval += heuristic[nbO];
+            }
+            nbX = 0;
+            nbO = 0;
+        }
+        for(int i =0;i<16;i=i+5){
+            if (this.cells[i] == x) {
+                nbX++;
+            }else if (this.cells[i] == o) {
+                nbO++;
+            }
+
+
+        }
+        if (nbX > 0 && nbO == 0 ){
+            eval += heuristic[nbX];
+        }
+        else if (nbO > 0 && nbX == 0 ){
+            eval += heuristic[nbO];
+        }
+        nbX = 0;
+        nbO = 0;
+        for(int i =3;i<13;i=i+3){
+            if (this.cells[i] == x) {
+                nbX++;
+            }else if (this.cells[i] == o) {
+                nbO++;
+            }
+        }
+        if (nbX > 0 && nbO == 0 ){
+            eval += heuristic[nbX];
+        }
+        else if (nbO > 0 && nbX == 0 ){
+            eval += heuristic[nbO];
+        }
+        return eval;
+    }
 
 }
