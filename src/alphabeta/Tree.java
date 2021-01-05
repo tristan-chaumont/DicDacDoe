@@ -12,7 +12,7 @@ public class Tree {
     private Node root;
     private int dimension;
     private char player;
-    private int freeCells;
+    //private int freeCells;
     private HashMap<StructureTicTacToe,TreeNode> duplicate;
     static int total = 0;
 
@@ -20,34 +20,126 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
-        freeCells = (int) Math.pow(4, dimension);
+        //freeCells = (int) Math.pow(4, dimension);
         if(player == 'X')
-        root = new Node(new TicTacToe_2D(), "max", Integer.MIN_VALUE, Integer.MAX_VALUE);
-        fillTree(root,freeCells);
+        root = new Node(new TicTacToe_2D(), "max");
+        /*if(dimension == 2)
+            fillTree(root,16);
+        else
+            fillTree(root,64);*/
+        alphabeta2D(root,Integer.MIN_VALUE, Integer.MAX_VALUE,1);
     }
 
-    public TreeNode fillTree(Node cn, int tmpfreecell){
-        Node currentNode = cn;
+    public int alphabeta2D(TreeNode cn,int alpha,int beta,int depth){
+        System.out.println(depth);
+        int v;
+        //On test si le fils est une feuille
+        if(cn instanceof Leaf){
+            return cn.getValue();
+        }else {
+            //On veut savoir le nombre de case vide
+            ArrayList<Integer> emptyCells = cn.getSituation().getEmptyCell();
+            int size = emptyCells.size();
+
+
+
+            //On veut connaître le joueur actuel
+                //Si joueur est min ( cercle )
+            if(((Node)cn).getType().equals("min")) {
+                //On veut créer tous les fils sauf si condition alpha >= beta validée
+                v = Integer.MAX_VALUE;
+                if(size == 1) {
+
+                }
+                for (int i = 0; i < size; i++) {
+                    //Création de la nouvelle situation
+                    int pos = emptyCells.get(i);
+                    TicTacToe_2D newSituation = new TicTacToe_2D((TicTacToe_2D)cn.getSituation());
+                    newSituation.setCell('O',pos);
+
+                    //On regarde si elle est solution
+                    //Si c'est la somution on crée une feuille
+                    TreeNode t;
+                    if(newSituation.findSolutionFromCell(pos)){
+                        t = new Leaf(newSituation,-1);
+                    }
+                    //Sinon on applique la récursivité
+                    else if(size != 1){
+                        t = new Node(newSituation, "max");
+                    }
+                    else{
+                        t = new Leaf(newSituation, 0);
+                    }
+                    ((Node) cn).addChildren(t);
+                    //On check la condition alpha beta
+                    v = Math.min(v,alphabeta2D(t,alpha,beta,depth+1));
+                    //Si elle est validé on retounre la valeur
+                    if(alpha >= v){
+                        return v;
+                    }
+                    //Sinon on met v dans beta
+                    beta = Math.min(beta,v);
+                }
+            }
+                //sinon ( le jouer est max (croix))
+            else{
+                // On veut créer tous les fils sauf si condition alpha >= beta validée
+                v = Integer.MIN_VALUE;
+                for (int i = 0; i < size; i++){
+                    //Création de la nouvelle situation
+                    int pos = emptyCells.get(i);
+                    TicTacToe_2D newSituation = new TicTacToe_2D((TicTacToe_2D)cn.getSituation());
+                    newSituation.setCell('X',pos);
+                    //On regarde si elle est solution
+                    //Si c'est la solution on crée une feuille
+                    TreeNode t;
+                    if(newSituation.findSolutionFromCell(pos)){
+                        t = new Leaf(newSituation,1);
+                    }
+                    //Sinon on applique la récursivité
+                    else if(size != 1){
+                        t = new Node(newSituation, "min");
+                    }
+                    else{
+                        t = new Leaf(newSituation, 0);
+                    }
+                    ((Node) cn).addChildren(t);
+                    //On check la condition alpha beta
+                    v = Math.max(v,alphabeta2D(t,alpha,beta,depth+1));
+                    //Si elle est validé on retounre la valeur
+                    if(v >= beta){
+                        return v;
+                    }
+                    //Sinon on met v dans alpha
+                    alpha = Math.max(alpha,v);
+                }
+            }
+            // On retourne la valeur
+            return v;
+        }
+    }
+/*
+    public void fillTree(Node cn, int freecell){
         if(dimension == 2){
             if(root == null){
                 if(player == 'X')
-                    currentNode = new Node(new TicTacToe_2D(), "max", Integer.MIN_VALUE, Integer.MAX_VALUE);
+                    cn = new Node(new TicTacToe_2D(), "max", Integer.MIN_VALUE, Integer.MAX_VALUE);
                 else
-                    currentNode = new Node(new TicTacToe_2D(), "min", Integer.MIN_VALUE, Integer.MAX_VALUE);
+                    cn = new Node(new TicTacToe_2D(), "min", Integer.MIN_VALUE, Integer.MAX_VALUE);
             }
-            TicTacToe_2D situation = (TicTacToe_2D) currentNode.getSituation();
+            TicTacToe_2D situation = (TicTacToe_2D) cn.getSituation();
             ArrayList<Integer> emptyCells = new ArrayList<>(situation.getEmptyCell());
             TicTacToe_2D newSituation;
             String newType;
             char newPlayer;
-            if(currentNode.getType().equals("max")) {
+            if(cn.getType().equals("max")) {
                 newType = "min";
                 newPlayer = 'X';
             }else {
                 newType = "max";
                 newPlayer = 'O';
             }
-            if(tmpfreecell == 1){
+            if(freecell == 1){
                 newSituation = new TicTacToe_2D(situation);
                 int pos = emptyCells.get(0);
                 newSituation.setCell(newPlayer, pos);
@@ -61,15 +153,22 @@ public class Tree {
                     } else {
                         t = new Leaf(newSituation, 0);
                     }
-                    currentNode.addChildren(t);
+                    cn.addChildren(t);
+                    if(cn.getType().equals("max")){
+                        cn.setAlpha(t.getValue());
+                        cn.setValue(t.getValue());
+                    }else{
+                        cn.setBeta(t.getValue());
+                        cn.setValue(t.getValue());
+                    }
                     this.duplicate.put(newSituation,t);
-                }
-                else{
+                }else{
                     TreeNode  t = duplicate.get(newSituation);
                     t.setDuplicate(true);
-                    currentNode.addChildren(t);
+                    cn.addChildren(t);
                 }
             }else {
+                int tmpfreecell = freecell;
                 // Pour chaque case libre on crée une situation
                 for (int i = 0; i < tmpfreecell; i++) {
                     newSituation = new TicTacToe_2D(situation);
@@ -83,83 +182,80 @@ public class Tree {
                                 t = new Leaf(newSituation, 1);
                             }
                             else {
-                                t =new Leaf(newSituation, -1);
+                                t = new Leaf(newSituation, -1);
                             }
                             if (newPlayer == player)
                                 break;
                         }
                         else {
-                            t =new Node(newSituation, newType, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                            if(cn.getType().equals("max"))
+                                t = new Node(newSituation, newType, cn.getAlpha(), Integer.MAX_VALUE);
+                            else
+                                t = new Node(newSituation, newType, Integer.MIN_VALUE, cn.getBeta());
+                            this.duplicate.put(newSituation,t);
+                            fillTree((Node)t,tmpfreecell - 1);
                         }
-                        currentNode.addChildren(t);
-                        this.duplicate.put(newSituation,t);
+                        cn.addChildren(t);
+                        if(t instanceof Leaf){
+                            try{
+                                int valChild = t.getValue();
 
-                   }
+                                if(cn.getType().equals("max")) {
+                                    if(valChild > cn.getAlpha()){
+                                        cn.setAlpha(valChild);
+                                        cn.setValue(valChild);
+                                    }
+                                }else{
+                                    if(valChild < cn.getBeta()){
+                                        cn.setBeta(valChild);
+                                        cn.setValue(valChild);
+                                    }
+                                }
+
+                                if(cn.getAlpha() >= cn.getBeta()){
+                                    tmpfreecell = 0;
+                                }
+                            }catch (Exception e){
+                                e.getStackTrace();
+                            }
+                        }
+                        if(t instanceof Node){
+                            try{
+                                int valChild = t.getValue();
+
+
+                                if(cn.getType().equals("max")) {
+                                    if(valChild > cn.getAlpha()){
+                                        cn.setAlpha(valChild);
+                                        cn.setValue(valChild);
+                                    }
+                                }else{
+                                    if(valChild < cn.getBeta()){
+                                        cn.setBeta(valChild);
+                                        cn.setValue(valChild);
+                                    }
+                                }
+
+                                if(cn.getAlpha() >= cn.getBeta()){
+                                    ;
+                                }
+                            }catch (Exception e){
+                                e.getStackTrace();
+                            }
+                        }
+                    }
                     else{
-                        TreeNode  t = duplicate.get(newSituation);
+                        TreeNode t = duplicate.get(newSituation);
                         t.setDuplicate(true);
-                        currentNode.addChildren(t);
+                        cn.addChildren(t);
                     }
                 }
             }
-            total += currentNode.getChildren().size();
+            total += cn.getChildren().size();
             System.out.println(total);
-            tmpfreecell--;
-            for (TreeNode child: currentNode.getChildren()) {
-                if(child instanceof Leaf){
-                    TreeNode currentChild = child;
-                    try{
-                        int valChild = currentChild.getValue();
-
-                        if(currentNode.getType().equals("max")) {
-                            if(valChild > currentNode.getAlpha()){
-                                currentNode.setAlpha(valChild);
-                                currentNode.setValue(valChild);
-                            }
-                        }else{
-                            if(valChild < currentNode.getBeta()){
-                                currentNode.setBeta(valChild);
-                                currentNode.setValue(valChild);
-                            }
-                        }
-
-                        if(currentNode.getAlpha() > currentNode.getBeta()){
-                            break;
-                        }
-                    }catch (Exception e){
-                        e.getStackTrace();
-                    }
-                }
-                if(child instanceof Node){
-                    TreeNode currentChild = fillTree((Node)child,tmpfreecell);
-                    // Faire l'alpha beta
-                    try{
-                        int valChild = currentChild.getValue();
-
-
-                    if(currentNode.getType().equals("max")) {
-                        if(valChild > currentNode.getAlpha()){
-                            currentNode.setAlpha(valChild);
-                            currentNode.setValue(valChild);
-                        }
-                    }else{
-                        if(valChild < currentNode.getBeta()){
-                            currentNode.setBeta(valChild);
-                            currentNode.setValue(valChild);
-                        }
-                    }
-
-                    if(currentNode.getAlpha() > currentNode.getBeta()){
-                        break;
-                    }
-                    }catch (Exception e){
-                        e.getStackTrace();
-                    }
-                }
-            }
+            //tmpfreecell--;
         }
-        return currentNode;
-    }
+    }*/
 
     public Node getRoot() {
         return root;

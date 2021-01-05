@@ -44,10 +44,7 @@ public class Main {
         }
         TicTacToe_2D game = new TicTacToe_2D(tictactoe);
         Tree tree = new Tree(2,'X');
-        ArrayList<TreeNode> path = tree.getRoot().alphaBeta();
-        for ( TreeNode tn: path ) {
-            System.out.println(tn.getSituation());
-        }
+        System.out.println(tree.getRoot().getValue());
         // Test de Tristan
         //System.out.println(game);
         //StructureTicTacToe game = new TicTacToe_3D(tictactoe);
