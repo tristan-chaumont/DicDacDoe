@@ -23,7 +23,7 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
-        maxDepth = 8;
+        maxDepth = 7;
         if(player == 'X');
         root = new Node(new TicTacToe_2D(), "max");
         /*if(dimension == 2)
@@ -37,7 +37,7 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
-        maxDepth = 8;
+        maxDepth = 7;
         if(player == 'X') {
             root = new Node(new TicTacToe_2D((TicTacToe_2D) sttt), "max");
         }

@@ -32,20 +32,6 @@ public class TicTacToe_2D extends StructureTicTacToe {
         return super.findSolutionFromCell(line, column, 1);
     }
 
-    @Override
-    public boolean solutionLine(int cell, char state) {
-        // trouve la case du debut de la ligne
-        int begin = cell - cell%4;
-        // parcours de la ligne
-        for(int i = begin;i<begin+4;i++){
-            if (this.cells[i] != state){
-                clearWinningCells();
-                return false;
-            }
-            setWinningCell(i);
-        }
-        return true;
-    }
 
     @Override
     public boolean solutionColumn(int cell, char state) {
@@ -60,6 +46,11 @@ public class TicTacToe_2D extends StructureTicTacToe {
             setWinningCell(i);
         }
         return true;
+    }
+
+    @Override
+    public boolean solutionDepth(int cell, char state) {
+        return false;
     }
 
     @Override

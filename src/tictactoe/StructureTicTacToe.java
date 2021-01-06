@@ -52,7 +52,7 @@ public abstract class StructureTicTacToe {
      */
     public boolean findSolutionFromCell(int cell){
         char state = this.cells[cell];
-        return (solutionLine(cell,state) || solutionColumn(cell,state) || solutionDiagonal(cell,state));
+        return (solutionLine(cell,state) || solutionColumn(cell,state) || solutionDepth(cell,state) ||solutionDiagonal(cell,state));
     }
 
     /**
@@ -73,7 +73,19 @@ public abstract class StructureTicTacToe {
      * @param state X ou O
      * @return
      */
-    public abstract boolean solutionLine(int cell,char state);
+    public boolean solutionLine(int cell,char state){
+        // trouve la case du debut de la ligne
+        int begin = cell - cell%4;
+        // parcours de la ligne
+        for(int i = begin;i<begin+4;i++){
+            if (this.cells[i] != state){
+                clearWinningCells();
+                return false;
+            }
+            setWinningCell(i);
+        }
+        return true;
+    }
 
     /**
      * Recherche une solution en colonne
@@ -90,6 +102,8 @@ public abstract class StructureTicTacToe {
      * @return
      */
     public abstract boolean solutionDiagonal(int cell,char state);
+
+    public abstract boolean solutionDepth(int cell,char state);
 
     /**
      * pour changer l'état d'une case

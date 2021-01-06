@@ -43,6 +43,19 @@ public class Main {
             i++;
         }
         TicTacToe_2D game = new TicTacToe_2D(tictactoe);
+        StringBuilder s = new StringBuilder("{");
+        for(int [][] diag : TicTacToe_3D.diagonalState){
+            s.append("{");
+            for(int[] cell : diag){
+                s.append(cell[0] * 16 + cell[1] * 4 + cell[2]).append(",");
+            }
+            s.deleteCharAt(s.length()-1);
+            s.append("},\n");
+        }
+        s.deleteCharAt(s.length()-1);
+        s.append("};");
+        System.out.println(s.toString());
+        /*
         System.out.println(game.heuristicEval());
 
         Tree tree = new Tree(2,'X');
@@ -62,7 +75,7 @@ public class Main {
         tree = new Tree(2,'X',game);
         game.setCell('X',tree.nextStep());
 
-        System.out.println(tree.getRoot().getValue());
+        System.out.println(tree.getRoot().getValue());*/
         // Test de Tristan
         //System.out.println(game);
         //StructureTicTacToe game = new TicTacToe_3D(tictactoe);

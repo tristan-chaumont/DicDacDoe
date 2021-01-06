@@ -3,8 +3,40 @@ package tictactoe;
 import utilities.Utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TicTacToe_3D extends StructureTicTacToe {
+
+    private static final Integer[][] diagonalState = {{0,5,10,15}, // diag cross column/line
+                                                {12,9,6,3},
+                                                {16,21,26,31},
+                                                {28,25,22,19},
+                                                {32,37,42,47},
+                                                {44,41,38,35},
+                                                {48,53,58,63},
+                                                {60,57,54,51},
+                                                {0,17,34,51}, // diag cross depth/line
+                                                {48,33,18,3},
+                                                {4,21,38,55},
+                                                {52,37,22,7},
+                                                {8,25,42,59},
+                                                {56,41,26,11},
+                                                {12,29,46,63},
+                                                {60,45,30,15},
+                                                {0,20,40,60}, // diag depth/column
+                                                {48,36,24,12},
+                                                {1,21,41,61},
+                                                {49,37,25,13},
+                                                {2,22,42,62},
+                                                {50,38,26,14},
+                                                {3,23,43,63},
+                                                {51,39,27,15},
+                                                {0,21,42,63}, //cube vertex diag
+                                                {48,37,26,15},
+                                                {12,25,38,51},
+                                                {60,41,22,3}
+                                                };
 
     public TicTacToe_3D() {
         super(64);
@@ -22,13 +54,14 @@ public class TicTacToe_3D extends StructureTicTacToe {
         super(another);
     }
 
+
     @Override
-    public boolean solutionLine(int cell, char state) {
-        // trouve la case du debut de la ligne
-        int begin = cell - cell%4;
-        // parcours de la ligne
-        for(int i = begin;i<begin+4;i++){
-            if (this.cells[i] != state){
+    public boolean solutionColumn(int cell, char state) {
+        //haut de la colonne
+        int begin = ((int)Math.floor(31/16)) * 16 + cell%4;
+        //parcours de la colonne
+        for(int i = begin;i<=i+12;i=i+4){
+            if (this.cells[i] != state) {
                 clearWinningCells();
                 return false;
             }
@@ -38,11 +71,9 @@ public class TicTacToe_3D extends StructureTicTacToe {
     }
 
     @Override
-    public boolean solutionColumn(int cell, char state) {
-        //haut de la colonne
-        int begin = cell%4;
-        //parcours de la colonne
-        for(int i = begin;i<16;i=i+4){
+    public boolean solutionDepth(int cell, char state) {
+        int begin = cell%16;
+        for(int i = begin;i<=63;i=i+16){
             if (this.cells[i] != state) {
                 clearWinningCells();
                 return false;
@@ -54,32 +85,29 @@ public class TicTacToe_3D extends StructureTicTacToe {
 
     @Override
     public boolean solutionDiagonal(int cell, char state) {
-        //verifie si il fait partie de la diagonale haut gauche a bas droite
-        if(cell%5 == 0){
-            //parcours de cette diagonale
-            for(int i =0;i<16;i=i+5){
-                if (this.cells[i] != state){
-                    clearWinningCells();
-                    return false;
+        boolean sol = false;
+
+        for(int i =0;i < diagonalState.length;i++){
+            for (int j=0;j<4;j++){
+                if(cell == diagonalState[i][j]){
+                    sol |= testDiagonal(i,state);
+                    break;
                 }
-                setWinningCell(i);
             }
-            return true;
         }
-        //verifie si il fait partie de la diagonale haut droite a bas gauche
-        else if(cell%3 == 0){
-            //parcours de cette diagonale
-            for(int i =3;i<13;i=i+3){
-                if (this.cells[i] != state){
-                    clearWinningCells();
-                    return false;
-                }
-                setWinningCell(i);
+        return sol;
+
+    }
+
+    public boolean testDiagonal(int line,char state){
+        for(int i=0;i<4;i++){
+            if (this.cells[diagonalState[line][i]] != state) {
+                clearWinningCells();
+                return false;
             }
-            return true;
+            setWinningCell(i);
         }
-        //si il ne fait pas partie d'une de ces 2 diagonales retoune zero
-        return false;
+        return true;
     }
 
     @Override
