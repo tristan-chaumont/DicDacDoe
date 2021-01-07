@@ -54,11 +54,15 @@ public class TicTacToe_3D extends StructureTicTacToe {
         super(another);
     }
 
+    @Override
+    public boolean findSolutionFromCell(int line, int column, int depth) {
+        return super.findSolutionFromCell(line, column, depth);
+    }
 
     @Override
     public boolean solutionColumn(int cell, char state) {
         //haut de la colonne
-        int begin = ((int)Math.floor(31/16)) * 16 + cell%4;
+        int begin = ((int)Math.floor(cell / 16)) * 16 + cell%4;
         //parcours de la colonne
         for(int i = begin;i<=i+12;i=i+4){
             if (this.cells[i] != state) {
@@ -105,7 +109,7 @@ public class TicTacToe_3D extends StructureTicTacToe {
                 clearWinningCells();
                 return false;
             }
-            setWinningCell(i);
+            setWinningCell(diagonalState[line][i]);
         }
         return true;
     }

@@ -43,18 +43,6 @@ public class Main {
             i++;
         }
         TicTacToe_2D game = new TicTacToe_2D(tictactoe);
-        StringBuilder s = new StringBuilder("{");
-        for(int [][] diag : TicTacToe_3D.diagonalState){
-            s.append("{");
-            for(int[] cell : diag){
-                s.append(cell[0] * 16 + cell[1] * 4 + cell[2]).append(",");
-            }
-            s.deleteCharAt(s.length()-1);
-            s.append("},\n");
-        }
-        s.deleteCharAt(s.length()-1);
-        s.append("};");
-        System.out.println(s.toString());
         /*
         System.out.println(game.heuristicEval());
 
