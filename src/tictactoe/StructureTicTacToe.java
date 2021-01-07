@@ -24,7 +24,7 @@ public abstract class StructureTicTacToe {
         cells = new char[size];
         emptyCell = new ArrayList<>();
         Arrays.fill(cells,' ');
-        emptyCell = IntStream.range(0, 16).boxed().collect(Collectors.toCollection(ArrayList::new));
+        emptyCell = IntStream.range(0, size).boxed().collect(Collectors.toCollection(ArrayList::new));
         winningCells = new ArrayList<>();
     }
 
