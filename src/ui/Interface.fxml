@@ -2,10 +2,8 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1300.0" styleClass="parent" stylesheets="@assets/styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LaunchController">
@@ -50,32 +48,6 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
-                           <children>
-                              <RadioButton fx:id="radioButtonCross" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font size="13.0" />
-                                 </font>
-                              </RadioButton>
-                              <Group>
-                                 <children>
-                                    <SVGPath content="m386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z" fill="#e63946" scaleX="0.07" scaleY="0.07" />
-                                 </children>
-                              </Group>
-                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" />
-                              <RadioButton fx:id="radioButtonCircle" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css">
-                                 <font>
-                                    <Font size="13.0" />
-                                 </font></RadioButton>
-                              <Group>
-                                 <children>
-                                    <SVGPath content="m257.778 515.556c-142.137 0-257.778-115.642-257.778-257.778s115.641-257.778 257.778-257.778 257.778 115.641 257.778 257.778-115.642 257.778-257.778 257.778zm0-451.112c-106.61 0-193.333 86.723-193.333 193.333s86.723 193.333 193.333 193.333 193.333-86.723 193.333-193.333-86.723-193.333-193.333-193.333z" fill="#ffe3a7" scaleX="0.06" scaleY="0.06" />
-                                 </children>
-                              </Group>
-                           </children></HBox>
                         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="390.0">
                            <children>
                               <RadioButton fx:id="radioButton2D" mnemonicParsing="false" styleClass="radio-button-custom" stylesheets="@assets/styles/style.css" text="2D" textFill="#abb2bf">

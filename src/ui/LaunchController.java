@@ -47,12 +47,6 @@ public class LaunchController implements Initializable {
     private HBox boardPane;
 
     @FXML
-    private RadioButton radioButtonCross;
-
-    @FXML
-    private RadioButton radioButtonCircle;
-
-    @FXML
     private RadioButton radioButton2D;
 
     @FXML
@@ -94,7 +88,7 @@ public class LaunchController implements Initializable {
 
     private int rows = 4, columns = 4;
 
-    private boolean gameOver;
+    private boolean gameOver, draw;
 
     private boolean aiPlays;
 
@@ -212,7 +206,7 @@ public class LaunchController implements Initializable {
                     Group icon;
                     if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver) {
                         // CROIX
-                        if (shapeGroup.getSelectedToggle().equals(radioButtonCross) && !aiPlays) {
+                        if (!aiStarts.isSelected() && !aiPlays) {
                             icon = IconsUtilities.makeGroupCross(0.08, 0.08);
                             ((TicTacToe_2D) ticTacToe).setCell('X', finalI + 1, finalJ + 1);
                         } else {
@@ -226,23 +220,7 @@ public class LaunchController implements Initializable {
                         handleWinningState(finalI + 1, finalJ + 1);
 
                         // On laisse l'IA jouer
-                        if (!gameOver) {
-                            aiPlays = true;
-                            Tree tree = new Tree(2, shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 'O' : 'X', ticTacToe);
-                            int playedCell = tree.nextStep();
-                            String[] aiMove = TicTacToeUtilities.getCellPos(playedCell).split(",");
-                            int aiRow = Integer.parseInt(aiMove[0]);
-                            int aiColumn = Integer.parseInt(aiMove[1]);
-                            if (shapeGroup.getSelectedToggle().equals(radioButtonCross)) {
-                                icon = IconsUtilities.makeGroupCircle(0.07, 0.07);
-                            } else {
-                                icon = IconsUtilities.makeGroupCross(0.08, 0.08);
-                            }
-                            writeMoveInformation(aiRow, aiColumn);
-                            ((StackPane) currentStage.getChildren().get(aiColumn + (aiRow * 4))).getChildren().add(icon);
-                            //handleWinningState(aiRow + 1, aiColumn + 1);
-                            aiPlays = false;
-                        }
+                        makeAIPlays();
                     }
                 });
                 currentStage.add(stackPane, j, i);
@@ -363,6 +341,7 @@ public class LaunchController implements Initializable {
      */
     public void initializeTicTacToe() {
         gameOver = false;
+        draw = false;
         currentDepth = 1;
         ArrayList<Integer> boardList;
         char[] boardArray;
@@ -460,7 +439,13 @@ public class LaunchController implements Initializable {
         } else {
             won = ((TicTacToe_3D) ticTacToe).findSolutionFromCell(row, column, currentDepth);
         }
-        if (won) {
+        if ((aiStarts.isSelected() && !aiPlays) || (!aiStarts.isSelected() && aiPlays)) {
+            draw = ticTacToe.getEmptyCell().size() == 0;
+            if (draw) {
+                gameOver = true;
+            }
+        }
+        if (won || draw) {
             gameOver = true;
             makeWinningScreen();
         }
@@ -475,10 +460,10 @@ public class LaunchController implements Initializable {
             int depth = Integer.parseInt(pos[2]);
             System.out.printf("%d %d %d%n", row, column, depth);
             Group icon;
-            if (currentPlayer == 0) {
-                icon = IconsUtilities.makeGroupCircle(0.07, 0.07, ColorsUtilities.GREEN);
-            } else {
+            if ((aiStarts.isSelected() && aiPlays) || (!aiStarts.isSelected() && !aiPlays)) {
                 icon = IconsUtilities.makeGroupCross(0.08, 0.08, ColorsUtilities.GREEN);
+            } else {
+                icon = IconsUtilities.makeGroupCircle(0.07, 0.07, ColorsUtilities.GREEN);
             }
             if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
                 ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().clear();
@@ -491,15 +476,36 @@ public class LaunchController implements Initializable {
         writeWinningState();
     }
 
+    private void makeAIPlays() {
+        if (!gameOver) {
+            Group icon;
+            aiPlays = true;
+            Tree tree = new Tree(2, aiStarts.isSelected() ? 'X' : 'O', ticTacToe);
+            System.out.println(ticTacToe);
+            int playedCell = tree.nextStep();
+            String[] aiMove = TicTacToeUtilities.getCellPos(playedCell).split(",");
+            int aiRow = Integer.parseInt(aiMove[0]);
+            int aiColumn = Integer.parseInt(aiMove[1]);
+            if (aiStarts.isSelected()) {
+                icon = IconsUtilities.makeGroupCross(0.08, 0.08);
+                ((TicTacToe_2D) ticTacToe).setCell('X', aiRow + 1, aiColumn + 1);
+            } else {
+                icon = IconsUtilities.makeGroupCircle(0.07, 0.07);
+                ((TicTacToe_2D) ticTacToe).setCell('O', aiRow + 1, aiColumn + 1);
+            }
+            System.out.println(ticTacToe);
+            writeMoveInformation(aiRow, aiColumn);
+            ((StackPane) currentStage.getChildren().get(aiColumn + (aiRow * 4))).getChildren().add(icon);
+            handleWinningState(aiRow + 1, aiColumn + 1);
+            aiPlays = false;
+        }
+    }
+
     //endregion
 
     //region GESTION DE LA FENETRE DES PARAMETRES
 
     private void linkRadioButtons() {
-        radioButtonCross.setToggleGroup(shapeGroup);
-        radioButtonCross.setSelected(true);
-        radioButtonCircle.setToggleGroup(shapeGroup);
-
         radioButton2D.setToggleGroup(dimensionGroup);
         radioButton2D.setSelected(true);
         radioButton3D.setToggleGroup(dimensionGroup);
@@ -542,13 +548,16 @@ public class LaunchController implements Initializable {
      */
     @FXML
     private void handleNewGameClick(MouseEvent event) {
-        currentPlayer = shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
+        currentPlayer = 0;
         // Parse le plateau et crée le tableau de Cells.
         initializeTicTacToe();
         boardPane.getChildren().clear();
         createTictactoe();
         information.getChildren().clear();
         initializeInformation();
+        if (aiStarts.isSelected()) {
+            makeAIPlays();
+        }
     }
 
     //endregion
@@ -588,7 +597,7 @@ public class LaunchController implements Initializable {
     private void writeMoveInformation(int line, int column) {
         Text playerShape;
         // CROIX
-        if (currentPlayer == 0) {
+        if ((aiStarts.isSelected() && aiPlays) || (!aiStarts.isSelected() && !aiPlays)) {
             playerShape = new Text(Utilities.LINE_SEPARATOR + "Cross");
             playerShape.setFill(Color.web(ColorsUtilities.RED));
             // CERCLE
@@ -623,13 +632,25 @@ public class LaunchController implements Initializable {
     }
 
     private void writeWinningState() {
-        Text player = new Text(Utilities.LINE_SEPARATOR + "Player ");
-        player.setFill(Color.web(ColorsUtilities.GREY));
-        player.setFont(Font.font("System", FontWeight.BOLD, 13));
-        Text winner = new Text("wins the game!");
-        winner.setFill(Color.web(ColorsUtilities.GREEN));
-        winner.setFont(Font.font("System", FontWeight.BOLD, 13));
-        information.getChildren().addAll(player, winner);
+        if (draw) {
+            Text result = new Text(Utilities.LINE_SEPARATOR + "Game over! Draw.");
+            result.setFill(Color.web(ColorsUtilities.GREEN));
+            result.setFont(Font.font("System", FontWeight.BOLD, 13));
+            information.getChildren().addAll(result);
+        } else {
+            Text player;
+            if (aiPlays) {
+                player = new Text(Utilities.LINE_SEPARATOR + "IA ");
+            } else {
+                player = new Text(Utilities.LINE_SEPARATOR + "Player ");
+            }
+            player.setFill(Color.web(ColorsUtilities.GREY));
+            player.setFont(Font.font("System", FontWeight.BOLD, 13));
+            Text winner = new Text("wins the game!");
+            winner.setFill(Color.web(ColorsUtilities.GREEN));
+            winner.setFont(Font.font("System", FontWeight.BOLD, 13));
+            information.getChildren().addAll(player, winner);
+        }
     }
 
     //endregion
