@@ -58,6 +58,18 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
+        long truc = sttt.getEmptyCell().size();
+        int i = 0;
+        long produit = truc;
+        while(produit < 1000000000 || truc == 0){
+            produit *= --truc;
+            System.out.println(produit);
+            i++;
+        }
+        if(i%2 == 0){
+            i--;
+        }
+        maxDepth = i;
         maxDepth = 5;
         String typePlayer;
         if(player == 'X') {
@@ -107,19 +119,17 @@ public class Tree {
                     //On regarde si elle est solution
                     //Si c'est la somution on crée une feuille
                     TreeNode t;
-                    if(newSituation.findSolutionFromCell(pos) || depth == maxDepth){
+                    if((newSituation.findSolutionFromCell(pos) || depth == maxDepth )){
                         int val = newSituation.heuristicEval();
                         //System.out.println(val);
                         t = new Leaf(newSituation,val);
                     }
                     //Sinon on applique la récursivité
-                    else if(size != 1){
+                    else{
                         t = new Node(newSituation, "max");
 
                     }
-                    else{
-                        t = new Leaf(newSituation, 0);
-                    }
+
                     t.setPos(pos);
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
@@ -151,11 +161,8 @@ public class Tree {
                         t = new Leaf(newSituation,val);
                     }
                     //Sinon on applique la récursivité
-                    else if(size != 1){
-                        t = new Node(newSituation, "min");
-                    }
                     else{
-                        t = new Leaf(newSituation, 0);
+                        t = new Node(newSituation, "min");
                     }
                     t.setPos(pos);
                     ((Node) cn).addChildren(t);
