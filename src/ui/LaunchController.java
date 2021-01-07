@@ -404,7 +404,7 @@ public class LaunchController implements Initializable {
                 stackPane.setOnMouseClicked(event -> {
                     Group rightIcon;
                     Group leftIcon;
-                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0) {
+                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver) {
                         // CROIX ou CERCLE
                         if (currentPlayer == 0) {
                             rightIcon = IconsUtilities.makeGroupCross(0.08, 0.08);
@@ -420,6 +420,7 @@ public class LaunchController implements Initializable {
                         currentPlayer = Math.abs(currentPlayer - 1);
 
                         stackPane.getChildren().add(rightIcon);
+                        handleWinningState(finalI + 1, finalJ + 1);
                     }
                 });
                 currentStage.add(stackPane, j, i);
@@ -433,7 +434,12 @@ public class LaunchController implements Initializable {
     }
 
     private void handleWinningState(int row, int column) {
-        boolean won = ((TicTacToe_2D) ticTacToe).findSolutionFromCell(row, column);
+        boolean won;
+        if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+            won = ((TicTacToe_2D) ticTacToe).findSolutionFromCell(row, column);
+        } else {
+            won = ((TicTacToe_3D) ticTacToe).findSolutionFromCell(row, column, currentDepth);
+        }
         if (won) {
             gameOver = true;
             makeWinningScreen();
@@ -441,11 +447,13 @@ public class LaunchController implements Initializable {
     }
 
     private void makeWinningScreen() {
+        System.out.println(ticTacToe.getWinningCells().size());
         ticTacToe.getWinningCells().forEach(c -> {
             String[] pos = TicTacTocUtilities.getCellPos(c).split(",");
             int row = Integer.parseInt(pos[0]);
             int column = Integer.parseInt(pos[1]);
             int depth = Integer.parseInt(pos[2]);
+            System.out.printf("%d %d %d%n", row, column, depth);
             Group icon;
             if (currentPlayer == 0) {
                 icon = IconsUtilities.makeGroupCircle(0.07, 0.07, ColorsUtilities.GREEN);
@@ -456,8 +464,8 @@ public class LaunchController implements Initializable {
                 ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().clear();
                 ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().add(icon);
             } else {
-                ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().clear();
-                ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().add(icon);
+                ((StackPane) stages[depth + 1].getChildren().get(column + (row * 4))).getChildren().clear();
+                ((StackPane) stages[depth + 1].getChildren().get(column + (row * 4))).getChildren().add(icon);
             }
         });
         writeWinningState();
