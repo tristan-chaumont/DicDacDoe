@@ -1,5 +1,6 @@
 package ui;
 
+import alphabeta.Tree;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -22,13 +23,12 @@ import tictactoe.TicTacToe_2D;
 import tictactoe.TicTacToe_3D;
 import utilities.ColorsUtilities;
 import utilities.IconsUtilities;
-import utilities.TicTacTocUtilities;
+import utilities.TicTacToeUtilities;
 import utilities.Utilities;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
@@ -95,6 +95,8 @@ public class LaunchController implements Initializable {
     private int rows = 4, columns = 4;
 
     private boolean gameOver;
+
+    private boolean aiPlays;
 
     //endregion
 
@@ -210,7 +212,7 @@ public class LaunchController implements Initializable {
                     Group icon;
                     if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver) {
                         // CROIX
-                        if (currentPlayer == 0) {
+                        if (shapeGroup.getSelectedToggle().equals(radioButtonCross) && !aiPlays) {
                             icon = IconsUtilities.makeGroupCross(0.08, 0.08);
                             ((TicTacToe_2D) ticTacToe).setCell('X', finalI + 1, finalJ + 1);
                         } else {
@@ -218,11 +220,29 @@ public class LaunchController implements Initializable {
                             ((TicTacToe_2D) ticTacToe).setCell('O', finalI + 1, finalJ + 1);
                         }
                         writeMoveInformation(finalI, finalJ);
-                        currentPlayer = Math.abs(currentPlayer - 1);
                         stackPane.getChildren().add(icon);
 
                         // On vérifie si c'est un coup gagnant, auquel cas on stoppe la partie
                         handleWinningState(finalI + 1, finalJ + 1);
+
+                        // On laisse l'IA jouer
+                        if (!gameOver) {
+                            aiPlays = true;
+                            Tree tree = new Tree(2, shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 'O' : 'X', ticTacToe);
+                            int playedCell = tree.nextStep();
+                            String[] aiMove = TicTacToeUtilities.getCellPos(playedCell).split(",");
+                            int aiRow = Integer.parseInt(aiMove[0]);
+                            int aiColumn = Integer.parseInt(aiMove[1]);
+                            if (shapeGroup.getSelectedToggle().equals(radioButtonCross)) {
+                                icon = IconsUtilities.makeGroupCircle(0.07, 0.07);
+                            } else {
+                                icon = IconsUtilities.makeGroupCross(0.08, 0.08);
+                            }
+                            writeMoveInformation(aiRow, aiColumn);
+                            ((StackPane) currentStage.getChildren().get(aiColumn + (aiRow * 4))).getChildren().add(icon);
+                            //handleWinningState(aiRow + 1, aiColumn + 1);
+                            aiPlays = false;
+                        }
                     }
                 });
                 currentStage.add(stackPane, j, i);
@@ -449,7 +469,7 @@ public class LaunchController implements Initializable {
     private void makeWinningScreen() {
         System.out.println(ticTacToe.getWinningCells().size());
         ticTacToe.getWinningCells().forEach(c -> {
-            String[] pos = TicTacTocUtilities.getCellPos(c).split(",");
+            String[] pos = TicTacToeUtilities.getCellPos(c).split(",");
             int row = Integer.parseInt(pos[0]);
             int column = Integer.parseInt(pos[1]);
             int depth = Integer.parseInt(pos[2]);
