@@ -186,6 +186,41 @@ public class TicTacToe_3D extends StructureTicTacToe {
         return  eval;
     }
 
+    public static ArrayList<char []> rotate(char [] cells){
+        ArrayList<char []> rotate = new ArrayList<>();
+        char [] opposite_diag_vertex = rotate_opposite_diag_vertex(cells);
+        char [] opposite_diag = rotate_opposite_diag(cells);
+        char [] opposite_diag_opposite_vertex = rotate_opposite_diag_vertex(opposite_diag);
+        rotate.add(opposite_diag_vertex);
+        rotate.add(opposite_diag);
+        rotate.add(opposite_diag_opposite_vertex);
+        return rotate;
+
+
+    }
+
+    public static char [] rotate_opposite_diag_vertex(char [] cells){
+        char [] cellsBis = new char[64];
+        for(int i = 0; i < cells.length;i++){
+            cellsBis[63-i] = cells[i];
+        }
+        return cellsBis;
+
+    }
+
+    public static char [] rotate_opposite_diag(char [] cells){
+        char [] cellsBis = new char[64];
+        for(int i = 0; i < 16;i++){
+            cellsBis[15-i] = cells[i];
+            cellsBis[31-i] = cells[i+16];
+            cellsBis[47-i] = cells[i+32];
+            cellsBis[63-i] = cells[i+48];
+        }
+        return cellsBis;
+
+    }
+
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();

@@ -48,11 +48,17 @@ public class Main {
 */
         Tree tree = new Tree(3,'X');
         System.out.println("tree");
-/*
+
         game.setCell('X',tree.nextStep());
 
-        tree = new Tree(2,'O',game);
+        tree = new Tree(3,'O',game);
         game.setCell('O',tree.nextStep());
+        ArrayList<char[]> etats = TicTacToe_3D.rotate(game.getCells());
+        System.out.println(game);
+        for(char [] etat : etats){
+            System.out.println(new TicTacToe_3D(etat));
+        }
+        /*
         tree = new Tree(2,'X',game);
         game.setCell('X',tree.nextStep());
         tree = new Tree(2,'O',game);

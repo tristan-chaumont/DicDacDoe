@@ -16,7 +16,7 @@ public class Tree {
     private char player;
     private  int maxDepth;
     //private int freeCells;
-    private HashMap<StructureTicTacToe,TreeNode> duplicate;
+    private HashMap<int [],Integer> duplicate;
     static int total = 0;
     private static ArrayList<TreeNode> path = new ArrayList<>();
     private static ArrayList<TreeNode> actualPath = new ArrayList<>();
@@ -220,6 +220,7 @@ public class Tree {
                     }
                     //Sinon on applique la récursivité
                     else if(size != 1){
+
                         t = new Node(newSituation, "max");
 
                     }
