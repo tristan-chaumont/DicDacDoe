@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 
 public abstract class StructureTicTacToe {
 
+    protected static int[]  heuristic = {0,1,3,7,9999};
     protected char [] cells;
     protected ArrayList<Integer> emptyCell;
     protected ArrayList<Integer> winningCells;
@@ -23,7 +24,7 @@ public abstract class StructureTicTacToe {
         cells = new char[size];
         emptyCell = new ArrayList<>();
         Arrays.fill(cells,' ');
-        emptyCell = IntStream.range(0, 16).boxed().collect(Collectors.toCollection(ArrayList::new));
+        emptyCell = IntStream.range(0, size).boxed().collect(Collectors.toCollection(ArrayList::new));
         winningCells = new ArrayList<>();
     }
 
