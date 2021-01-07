@@ -1,6 +1,6 @@
 package utilities;
 
-public class TicTacTocUtilities {
+public class TicTacToeUtilities {
 
     public static String getCellPos(int cell) {
         int row, column, depth;

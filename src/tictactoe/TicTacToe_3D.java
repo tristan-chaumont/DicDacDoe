@@ -91,18 +91,16 @@ public class TicTacToe_3D extends StructureTicTacToe {
 
     @Override
     public boolean solutionDiagonal(int cell, char state) {
-        boolean sol = false;
-
         for(int i =0;i < diagonalState.length;i++){
             for (int j=0;j<4;j++){
                 if(cell == diagonalState[i][j]){
-                    sol |= testDiagonal(i,state);
-                    break;
+                    if (testDiagonal(i, state)) {
+                        return true;
+                    }
                 }
             }
         }
-        return sol;
-
+        return false;
     }
 
     public boolean testDiagonal(int line,char state){

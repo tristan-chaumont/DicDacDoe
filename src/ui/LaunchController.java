@@ -1,5 +1,6 @@
 package ui;
 
+import alphabeta.Tree;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -22,13 +23,12 @@ import tictactoe.TicTacToe_2D;
 import tictactoe.TicTacToe_3D;
 import utilities.ColorsUtilities;
 import utilities.IconsUtilities;
-import utilities.TicTacTocUtilities;
+import utilities.TicTacToeUtilities;
 import utilities.Utilities;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
@@ -45,12 +45,6 @@ public class LaunchController implements Initializable {
 
     @FXML
     private HBox boardPane;
-
-    @FXML
-    private RadioButton radioButtonCross;
-
-    @FXML
-    private RadioButton radioButtonCircle;
 
     @FXML
     private RadioButton radioButton2D;
@@ -82,8 +76,6 @@ public class LaunchController implements Initializable {
 
     private final ToggleGroup dimensionGroup = new ToggleGroup();
 
-    private int currentPlayer;
-
     private int currentDepth;
 
     private GridPane[] stages;
@@ -94,7 +86,9 @@ public class LaunchController implements Initializable {
 
     private int rows = 4, columns = 4;
 
-    private boolean gameOver;
+    private boolean gameOver, draw;
+
+    private boolean aiPlays;
 
     //endregion
 
@@ -210,7 +204,7 @@ public class LaunchController implements Initializable {
                     Group icon;
                     if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver) {
                         // CROIX
-                        if (currentPlayer == 0) {
+                        if (!aiStarts.isSelected() && !aiPlays) {
                             icon = IconsUtilities.makeGroupCross(0.08, 0.08);
                             ((TicTacToe_2D) ticTacToe).setCell('X', finalI + 1, finalJ + 1);
                         } else {
@@ -218,11 +212,13 @@ public class LaunchController implements Initializable {
                             ((TicTacToe_2D) ticTacToe).setCell('O', finalI + 1, finalJ + 1);
                         }
                         writeMoveInformation(finalI, finalJ);
-                        currentPlayer = Math.abs(currentPlayer - 1);
                         stackPane.getChildren().add(icon);
 
                         // On vérifie si c'est un coup gagnant, auquel cas on stoppe la partie
-                        handleWinningState(finalI + 1, finalJ + 1);
+                        handleWinningState(finalI, finalJ);
+
+                        // On laisse l'IA jouer
+                        makeAIPlays();
                     }
                 });
                 currentStage.add(stackPane, j, i);
@@ -281,7 +277,7 @@ public class LaunchController implements Initializable {
                     stackPane.getStyleClass().add("tictactoe-cell-stage");
                     stackPane.getStyleClass().add("tictactoe-stage-cells-" + d);
 
-                    char cell = ((TicTacToe_3D) ticTacToe).getCell(l + 1, c + 1, (stages.length + 1) - (d + 1));
+                    char cell = ((TicTacToe_3D) ticTacToe).getCell(l + 1, c + 1, d + 1);
                     if (cell == 'X') {
                         stackPane.getChildren().add(IconsUtilities.makeGroupCross(0.024, 0.024));
                     } else if (cell == 'O') {
@@ -303,8 +299,8 @@ public class LaunchController implements Initializable {
                         stagesSelected[i] = false;
                     }
                     stagesSelected[depth] = true;
-                    currentDepth = (stages.length + 1) - (depth + 1);
-                    displayCurrentStage(depth);
+                    currentDepth = depth;
+                    displayCurrentStage();
                 }
             });
             stagesPane.getChildren().add(stages[d]);
@@ -312,7 +308,7 @@ public class LaunchController implements Initializable {
             stagesPane.getChildren().add(createSpacer());
         }
         // Le premier étage est sélectionné
-        stages[3].getStyleClass().add("tictactoe-stage-selected-3");
+        stages[0].getStyleClass().add("tictactoe-stage-selected-0");
 
         // Fenêtre de l'étage actuelle
         addCellOnRightStage();
@@ -343,7 +339,8 @@ public class LaunchController implements Initializable {
      */
     public void initializeTicTacToe() {
         gameOver = false;
-        currentDepth = 1;
+        draw = false;
+        currentDepth = 0;
         ArrayList<Integer> boardList;
         char[] boardArray;
 
@@ -356,7 +353,7 @@ public class LaunchController implements Initializable {
             ticTacToe = new TicTacToe_3D();
             boardList = Utilities.parseBoard(3, files.get(comboBoxFiles.getValue()).getPath());
             boardArray = new char[(int) Math.pow(4, 3)];
-            stagesSelected = new boolean[]{false, false, false, true};
+            stagesSelected = new boolean[]{true, false, false, false};
         }
 
         for (int i = 0; i < boardList.size(); i++) {
@@ -377,11 +374,19 @@ public class LaunchController implements Initializable {
     }
 
     private void addCellOnLeftStage(Group icon, int row, int column) {
-        ((StackPane) stages[(stages.length + 1) - (this.currentDepth + 1)].getChildren().get(column + (row * 4))).getChildren().add(icon);
-        if (((SVGPath) icon.getChildren().get(0)).getContent().equals("m386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z")) {
-            ticTacToe.setCell('X', row + 1, column + 1, currentDepth);
+        addCellOnLeftStageHelper(icon, row, column, currentDepth);
+    }
+
+    private void addCellOnLeftStage(Group icon, int row, int column, int depth) {
+        addCellOnLeftStageHelper(icon, row, column, depth);
+    }
+
+    private void addCellOnLeftStageHelper(Group icon, int row, int column, int depth) {
+        ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().add(icon);
+        if ((aiStarts.isSelected() && aiPlays) || (!aiStarts.isSelected() && !aiPlays)) {
+            ticTacToe.setCell('X', row + 1, column + 1, depth + 1);
         } else {
-            ticTacToe.setCell('O', row + 1, column + 1, currentDepth);
+            ticTacToe.setCell('O', row + 1, column + 1, depth + 1);
         }
     }
 
@@ -391,7 +396,7 @@ public class LaunchController implements Initializable {
             for (int j = 0; j < columns; j++) {
                 StackPane stackPane = makeTicTacToeCell(i, j);
 
-                char cell = ((TicTacToe_3D) ticTacToe).getCell(i + 1, j + 1, this.currentDepth);
+                char cell = ((TicTacToe_3D) ticTacToe).getCell(i + 1, j + 1, currentDepth + 1);
                 if (cell == 'X') {
                     stackPane.getChildren().add(IconsUtilities.makeGroupCross(0.08, 0.08));
                 } else if (cell == 'O') {
@@ -404,9 +409,9 @@ public class LaunchController implements Initializable {
                 stackPane.setOnMouseClicked(event -> {
                     Group rightIcon;
                     Group leftIcon;
-                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver) {
+                    if (event.getButton() == MouseButton.PRIMARY && stackPane.getChildren().size() == 0 && !gameOver && !aiPlays) {
                         // CROIX ou CERCLE
-                        if (currentPlayer == 0) {
+                        if (!aiStarts.isSelected() && !aiPlays) {
                             rightIcon = IconsUtilities.makeGroupCross(0.08, 0.08);
                             leftIcon = IconsUtilities.makeGroupCross(0.024, 0.024);
                         } else {
@@ -417,10 +422,12 @@ public class LaunchController implements Initializable {
                         addCellOnLeftStage(leftIcon, finalI, finalJ);
 
                         writeMoveInformation(finalI, finalJ);
-                        currentPlayer = Math.abs(currentPlayer - 1);
 
                         stackPane.getChildren().add(rightIcon);
-                        handleWinningState(finalI + 1, finalJ + 1);
+                        handleWinningState(finalI, finalJ);
+
+                        // On fait jouer l'IA
+                        makeAIPlays();
                     }
                 });
                 currentStage.add(stackPane, j, i);
@@ -428,47 +435,107 @@ public class LaunchController implements Initializable {
         }
     }
 
-    private void displayCurrentStage(int depthClicked) {
+    private void displayCurrentStage() {
         currentStage.getChildren().clear();
         addCellOnRightStage();
     }
 
     private void handleWinningState(int row, int column) {
+        handleWinningStateHelper(row + 1, column + 1, currentDepth + 1);
+    }
+
+    private void handleWinningState(int row, int column, int depth) {
+        handleWinningStateHelper(row + 1, column + 1, depth + 1);
+    }
+
+    private void handleWinningStateHelper(int row, int column, int depth) {
         boolean won;
         if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
             won = ((TicTacToe_2D) ticTacToe).findSolutionFromCell(row, column);
         } else {
-            won = ((TicTacToe_3D) ticTacToe).findSolutionFromCell(row, column, currentDepth);
+            won = ((TicTacToe_3D) ticTacToe).findSolutionFromCell(row, column, depth);
         }
-        if (won) {
+        if (((aiStarts.isSelected() && !aiPlays) || (!aiStarts.isSelected() && aiPlays)) && !won) {
+            draw = ticTacToe.getEmptyCell().size() == 0;
+            if (draw) {
+                gameOver = true;
+            }
+        }
+        if (won || draw) {
             gameOver = true;
             makeWinningScreen();
         }
     }
 
     private void makeWinningScreen() {
-        System.out.println(ticTacToe.getWinningCells().size());
         ticTacToe.getWinningCells().forEach(c -> {
-            String[] pos = TicTacTocUtilities.getCellPos(c).split(",");
+            String[] pos = TicTacToeUtilities.getCellPos(c).split(",");
             int row = Integer.parseInt(pos[0]);
             int column = Integer.parseInt(pos[1]);
             int depth = Integer.parseInt(pos[2]);
-            System.out.printf("%d %d %d%n", row, column, depth);
             Group icon;
-            if (currentPlayer == 0) {
-                icon = IconsUtilities.makeGroupCircle(0.07, 0.07, ColorsUtilities.GREEN);
+            if ((aiStarts.isSelected() && aiPlays) || (!aiStarts.isSelected() && !aiPlays)) {
+                if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+                    icon = IconsUtilities.makeGroupCross(0.08, 0.08, ColorsUtilities.GREEN);
+                } else {
+                    icon = IconsUtilities.makeGroupCross(0.024, 0.024, ColorsUtilities.GREEN);
+                }
             } else {
-                icon = IconsUtilities.makeGroupCross(0.08, 0.08, ColorsUtilities.GREEN);
+                if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+                    icon = IconsUtilities.makeGroupCircle(0.07, 0.07, ColorsUtilities.GREEN);
+                } else {
+                    icon = IconsUtilities.makeGroupCircle(0.021, 0.021, ColorsUtilities.GREEN);
+                }
             }
             if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
                 ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().clear();
                 ((StackPane) currentStage.getChildren().get(column + (row * 4))).getChildren().add(icon);
             } else {
-                ((StackPane) stages[depth + 1].getChildren().get(column + (row * 4))).getChildren().clear();
-                ((StackPane) stages[depth + 1].getChildren().get(column + (row * 4))).getChildren().add(icon);
+                ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().clear();
+                ((StackPane) stages[depth].getChildren().get(column + (row * 4))).getChildren().add(icon);
             }
         });
         writeWinningState();
+    }
+
+    private void makeAIPlays() {
+        if (!gameOver) {
+            Group rightIcon, leftIcon;
+            aiPlays = true;
+            Tree tree;
+            if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+                tree = new Tree(2, aiStarts.isSelected() ? 'X' : 'O', ticTacToe);
+            } else {
+                tree = new Tree(3, aiStarts.isSelected() ? 'X' : 'O', ticTacToe);
+            }
+            int playedCell = tree.nextStep();
+            String[] aiMove = TicTacToeUtilities.getCellPos(playedCell).split(",");
+            int aiRow = Integer.parseInt(aiMove[0]);
+            int aiColumn = Integer.parseInt(aiMove[1]);
+            int aiDepth = Integer.parseInt(aiMove[2]);
+            if (aiStarts.isSelected()) {
+                rightIcon = IconsUtilities.makeGroupCross(0.08, 0.08);
+                leftIcon = IconsUtilities.makeGroupCross(0.024, 0.024);
+                ticTacToe.setCell('X', aiRow + 1, aiColumn + 1, aiDepth + 1);
+            } else {
+                rightIcon = IconsUtilities.makeGroupCircle(0.07, 0.07);
+                leftIcon = IconsUtilities.makeGroupCircle(0.021, 0.021);
+                ticTacToe.setCell('O', aiRow + 1, aiColumn + 1, aiDepth + 1);
+            }
+            System.out.println(ticTacToe);
+            writeMoveInformation(aiRow, aiColumn, aiDepth);
+            if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
+                ((StackPane) currentStage.getChildren().get(aiColumn + (aiRow * 4))).getChildren().add(rightIcon);
+                handleWinningState(aiRow, aiColumn);
+            } else {
+                addCellOnLeftStage(leftIcon, aiRow, aiColumn, aiDepth);
+                if (aiDepth == currentDepth) {
+                    ((StackPane) currentStage.getChildren().get(aiColumn + (aiRow * 4))).getChildren().add(rightIcon);
+                }
+                handleWinningState(aiRow, aiColumn, aiDepth);
+            }
+            aiPlays = false;
+        }
     }
 
     //endregion
@@ -476,10 +543,6 @@ public class LaunchController implements Initializable {
     //region GESTION DE LA FENETRE DES PARAMETRES
 
     private void linkRadioButtons() {
-        radioButtonCross.setToggleGroup(shapeGroup);
-        radioButtonCross.setSelected(true);
-        radioButtonCircle.setToggleGroup(shapeGroup);
-
         radioButton2D.setToggleGroup(dimensionGroup);
         radioButton2D.setSelected(true);
         radioButton3D.setToggleGroup(dimensionGroup);
@@ -522,13 +585,18 @@ public class LaunchController implements Initializable {
      */
     @FXML
     private void handleNewGameClick(MouseEvent event) {
-        currentPlayer = shapeGroup.getSelectedToggle().equals(radioButtonCross) ? 0 : 1;
         // Parse le plateau et crée le tableau de Cells.
         initializeTicTacToe();
         boardPane.getChildren().clear();
         createTictactoe();
         information.getChildren().clear();
+        if (aiStarts.isSelected()) {
+            aiPlays = true;
+        }
         initializeInformation();
+        if (aiStarts.isSelected()) {
+            makeAIPlays();
+        }
     }
 
     //endregion
@@ -540,14 +608,19 @@ public class LaunchController implements Initializable {
      * Informe l'utilisateur du joueur qui commence ainsi que de la forme qu'il utilise.
      */
     private void initializeInformation() {
-        Text player = new Text("Player ");
+        Text player;
+        if (aiStarts.isSelected()) {
+            player = new Text("AI ");
+        } else {
+            player = new Text("Player ");
+        }
         player.setFill(Color.web(ColorsUtilities.GREY));
         player.setFont(Font.font("System", FontWeight.BOLD, 13));
         Text playerStart = new Text("starts and plays ");
         playerStart.setFill(Color.web(ColorsUtilities.GREY));
         playerStart.setFont(Font.font(13));
         Text playerShape;
-        if (currentPlayer == 0) {
+        if (aiStarts.isSelected() && aiPlays || !aiStarts.isSelected() && !aiPlays) {
             playerShape = new Text("Cross");
             playerShape.setFill(Color.web(ColorsUtilities.RED));
         } else {
@@ -560,15 +633,30 @@ public class LaunchController implements Initializable {
 
     /**
      * Écrit le mouvement du joueur dans la fenêtre des informations.
-     * @param line
+     * @param row
      *      Ligne sur laquelle le joueur a effectué son mouvement.
      * @param column
      *      Colonne sur laquelle le joueur a effectué son mouvement.
      */
-    private void writeMoveInformation(int line, int column) {
+    private void writeMoveInformation(int row, int column) {
+        writeMoveInformationHelper(row, column, currentDepth);
+    }
+
+    /**
+     * Écrit le mouvement du joueur dans la fenêtre des informations.
+     * @param row
+     *      Ligne sur laquelle le joueur a effectué son mouvement.
+     * @param column
+     *      Colonne sur laquelle le joueur a effectué son mouvement.
+     */
+    private void writeMoveInformation(int row, int column, int depth) {
+        writeMoveInformationHelper(row, column, depth);
+    }
+
+    private void writeMoveInformationHelper(int row, int column, int depth) {
         Text playerShape;
         // CROIX
-        if (currentPlayer == 0) {
+        if ((aiStarts.isSelected() && aiPlays) || (!aiStarts.isSelected() && !aiPlays)) {
             playerShape = new Text(Utilities.LINE_SEPARATOR + "Cross");
             playerShape.setFill(Color.web(ColorsUtilities.RED));
             // CERCLE
@@ -578,11 +666,11 @@ public class LaunchController implements Initializable {
         }
         playerShape.setFont(Font.font("System", FontWeight.BOLD, 13));
         Text playerMoveStartLine = new Text(" played at line ");
-        Text playerMoveLine = new Text(Integer.toString(line + 1));
+        Text playerMoveLine = new Text(Integer.toString(row + 1));
         Text playerMoveComaColumn = new Text(", column ");
         Text playerMoveColumn = new Text(Integer.toString(column + 1));
         Text playerMoveComaDepth = new Text(", depth ");
-        Text playerMoveDepth = new Text(Integer.toString(currentDepth));
+        Text playerMoveDepth = new Text(Integer.toString(depth + 1));
         playerMoveStartLine.setFill(Color.web(ColorsUtilities.GREY));
         playerMoveStartLine.setFont(Font.font(13));
         playerMoveLine.setFill(Color.web(ColorsUtilities.GREY));
@@ -603,13 +691,25 @@ public class LaunchController implements Initializable {
     }
 
     private void writeWinningState() {
-        Text player = new Text(Utilities.LINE_SEPARATOR + "Player ");
-        player.setFill(Color.web(ColorsUtilities.GREY));
-        player.setFont(Font.font("System", FontWeight.BOLD, 13));
-        Text winner = new Text("wins the game!");
-        winner.setFill(Color.web(ColorsUtilities.GREEN));
-        winner.setFont(Font.font("System", FontWeight.BOLD, 13));
-        information.getChildren().addAll(player, winner);
+        if (draw) {
+            Text result = new Text(Utilities.LINE_SEPARATOR + "Game over! Draw.");
+            result.setFill(Color.web(ColorsUtilities.GREEN));
+            result.setFont(Font.font("System", FontWeight.BOLD, 13));
+            information.getChildren().addAll(result);
+        } else {
+            Text player;
+            if (aiPlays) {
+                player = new Text(Utilities.LINE_SEPARATOR + "AI ");
+            } else {
+                player = new Text(Utilities.LINE_SEPARATOR + "Player ");
+            }
+            player.setFill(Color.web(ColorsUtilities.GREY));
+            player.setFont(Font.font("System", FontWeight.BOLD, 13));
+            Text winner = new Text("wins the game!");
+            winner.setFill(Color.web(ColorsUtilities.GREEN));
+            winner.setFont(Font.font("System", FontWeight.BOLD, 13));
+            information.getChildren().addAll(player, winner);
+        }
     }
 
     //endregion

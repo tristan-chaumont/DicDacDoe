@@ -61,7 +61,7 @@ public class Tree {
         long truc = sttt.getEmptyCell().size();
         int i = 0;
         long produit = truc;
-        while(produit < 1000000000 || truc == 0){
+        while(produit < 1000000000 && truc > 1){
             produit *= --truc;
             System.out.println(produit);
             i++;
