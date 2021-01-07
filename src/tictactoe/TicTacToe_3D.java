@@ -58,9 +58,9 @@ public class TicTacToe_3D extends StructureTicTacToe {
     @Override
     public boolean solutionColumn(int cell, char state) {
         //haut de la colonne
-        int begin = ((int)Math.floor(31/16)) * 16 + cell%4;
+        int begin = ((int)Math.floor(cell/16)) * 16 + cell%4;
         //parcours de la colonne
-        for(int i = begin;i<=i+12;i=i+4){
+        for(int i = begin;i<=begin+12;i=i+4){
             if (this.cells[i] != state) {
                 clearWinningCells();
                 return false;
@@ -117,7 +117,67 @@ public class TicTacToe_3D extends StructureTicTacToe {
 
     @Override
     public int heuristicEval() {
-        return 0;
+        char x = 'X';
+        char o = 'O';
+        int eval = 0;
+        int nbO = 0;
+        int nbX =0;
+
+        // parcours de la ligne
+        for(int i = 0;i<16;i++) {
+            for (int j = 4 * i; j < i*4 + 4; j++) {
+                if (this.cells[j] == x) {
+                    nbX++;
+                }else if (this.cells[j] == o) {
+                    nbO++;
+                }
+            }
+            if (nbX > 0 && nbO == 0 ){
+                eval += heuristic[nbX];
+            }
+            else if (nbO > 0 && nbX == 0 ){
+                eval -= heuristic[nbO];
+            }
+            nbX = 0;
+            nbO = 0;
+        }
+        int begin;
+        for(int i = 0;i<16;i++) {
+            begin = i%4+16*(i/4);
+            for (int j = begin; j < begin+12; j=j+4) {
+                if (this.cells[j] == x) {
+                    nbX++;
+                }else if (this.cells[j] == o) {
+                    nbO++;
+                }
+            }
+            if (nbX > 0 && nbO == 0 ){
+                eval += heuristic[nbX];
+            }
+            else if (nbO > 0 && nbX == 0 ){
+                eval -= heuristic[nbO];
+            }
+            nbX = 0;
+            nbO = 0;
+        }
+        for(int i =0;i < diagonalState.length;i++){
+            for (int j=0;j<4;j++){
+                if (this.cells[diagonalState[i][j]] == x) {
+                    nbX++;
+                }else if (this.cells[diagonalState[i][j]] == o) {
+                    nbO++;
+                }
+            }
+            if (nbX > 0 && nbO == 0 ){
+                eval += heuristic[nbX];
+            }
+            else if (nbO > 0 && nbX == 0 ){
+                eval -= heuristic[nbO];
+            }
+            nbX = 0;
+            nbO = 0;
+        }
+        return  eval;
     }
 
     @Override

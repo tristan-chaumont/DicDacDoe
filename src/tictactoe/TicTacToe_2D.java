@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TicTacToe_2D extends StructureTicTacToe {
 
-    private static int[]  heuristic = {0,1,3,7,9999};
+
 
     public TicTacToe_2D() {
         super(16);
