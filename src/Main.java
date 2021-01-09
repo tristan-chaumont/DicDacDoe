@@ -174,7 +174,7 @@ public class Main {
 
     public static void turnIaPlayer(StructureTicTacToe sttt,char firstToPlay,char humanPlayer,int dim){
         boolean iaBegin = firstToPlay != humanPlayer;
-        char player2 = (firstToPlay == 'X') ? 'O' : 'X';
+        char player2 = (humanPlayer == 'X') ? 'O' : 'X';
         while(true) {
             int pos;
             if(iaBegin){
