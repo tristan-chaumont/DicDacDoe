@@ -79,10 +79,10 @@ public class Tree {
            typePlayer = "min";
         }
 
-        if(dimension == 2) {
+        if (dimension == 2) {
             root = new Node(new TicTacToe_2D((TicTacToe_2D) sttt), typePlayer);
             alphabeta2D(root, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
-        }else{
+        } else {
             root = new Node(new TicTacToe_3D((TicTacToe_3D) sttt), typePlayer);
             alphabeta3D(root,Integer.MIN_VALUE, Integer.MAX_VALUE,1);
         }
