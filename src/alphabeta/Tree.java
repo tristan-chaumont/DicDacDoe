@@ -30,7 +30,7 @@ public class Tree {
         long produit = truc;
         while(produit < 1000000000){
             produit *= --truc;
-            System.out.println(produit);
+            //System.out.println(produit);
             i++;
         }
         if(i%2 == 0){
@@ -63,7 +63,7 @@ public class Tree {
         long produit = truc;
         while(produit < 1000000000 && truc > 1){
             produit *= --truc;
-            System.out.println(produit);
+            //System.out.println(produit);
             i++;
         }
         if(i%2 == 0){
@@ -186,7 +186,6 @@ public class Tree {
         int v;
         //On test si le fils est une feuille
         if(cn instanceof Leaf){
-            //path.add(cn);
             return cn.getValue();
         }else {
             //On veut savoir le nombre de case vide
@@ -227,8 +226,10 @@ public class Tree {
                     else{
                         t = new Leaf(newSituation, 0);
                     }
-                    t.setPos(pos);
-                    ((Node) cn).addChildren(t);
+                    if (depth == 1) {
+                        t.setPos(pos);
+                        ((Node) cn).addChildren(t);
+                    }
                     //On check la condition alpha beta
                     v = Math.min(v,alphabeta3D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
@@ -264,8 +265,10 @@ public class Tree {
                     else{
                         t = new Leaf(newSituation, 0);
                     }
-                    t.setPos(pos);
-                    ((Node) cn).addChildren(t);
+                    if (depth == 1) {
+                        t.setPos(pos);
+                        ((Node) cn).addChildren(t);
+                    }
                     //On check la condition alpha beta
                     v = Math.max(v,alphabeta3D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
@@ -422,6 +425,7 @@ public class Tree {
 
     public int nextStep(){
         int val = root.getValue();
+        //System.out.println(root.getValue());
         for(TreeNode t : root.getChildren()){
             if (t.getValue() == val){
                 return t.getPos();

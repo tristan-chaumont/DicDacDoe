@@ -189,6 +189,7 @@ public class TicTacToe_3D extends StructureTicTacToe {
         char [] opposite_diag_vertex = rotate_opposite_diag_vertex(cells);
         char [] opposite_diag = rotate_opposite_diag(cells);
         char [] opposite_diag_opposite_vertex = rotate_opposite_diag_vertex(opposite_diag);
+        rotate.add(cells);
         rotate.add(opposite_diag_vertex);
         rotate.add(opposite_diag);
         rotate.add(opposite_diag_opposite_vertex);

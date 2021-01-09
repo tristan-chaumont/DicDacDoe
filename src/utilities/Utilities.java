@@ -101,4 +101,24 @@ public class Utilities {
         }
         return board;
     }
+
+    public static char[] boardToTicTacToe(int dim,ArrayList<Integer> board){
+        char [] tictactoe = new char[(int) Math.pow(4, dim)];
+        int i = 0;
+        for(int cell : board){
+            switch (cell) {
+                case -1:
+                    tictactoe[i] = ' ';
+                    break;
+                case 0:
+                    tictactoe[i] = 'O';
+                    break;
+                case 1:
+                    tictactoe[i] = 'X';
+                    break;
+            }
+            i++;
+        }
+        return tictactoe;
+    }
 }
