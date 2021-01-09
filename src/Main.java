@@ -113,7 +113,7 @@ public class Main {
             }
         }
         while (true) {
-            System.out.println("Voulez vous jouez contre une IA");
+            System.out.println("Voulez vous jouez contre une IA (Y/N)");
             response = sc.nextLine();
             if(response.equals("Y") || response.equals("N")){
                 ia = response.equals("Y");
