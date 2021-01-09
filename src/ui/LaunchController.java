@@ -1,6 +1,7 @@
 package ui;
 
 import alphabeta.Tree;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -13,7 +14,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -30,6 +30,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
@@ -418,12 +419,13 @@ public class LaunchController implements Initializable {
                             rightIcon = IconsUtilities.makeGroupCircle(0.07, 0.07);
                             leftIcon = IconsUtilities.makeGroupCircle(0.021, 0.021);
                         }
+                        stackPane.getChildren().add(rightIcon);
+                        stackPane.requestLayout();
 
                         addCellOnLeftStage(leftIcon, finalI, finalJ);
 
                         writeMoveInformation(finalI, finalJ);
 
-                        stackPane.getChildren().add(rightIcon);
                         handleWinningState(finalI, finalJ);
 
                         // On fait jouer l'IA

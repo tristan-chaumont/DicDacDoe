@@ -79,10 +79,10 @@ public class Tree {
            typePlayer = "min";
         }
 
-        if(dimension == 2) {
+        if (dimension == 2) {
             root = new Node(new TicTacToe_2D((TicTacToe_2D) sttt), typePlayer);
             alphabeta2D(root, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
-        }else{
+        } else {
             root = new Node(new TicTacToe_3D((TicTacToe_3D) sttt), typePlayer);
             alphabeta3D(root,Integer.MIN_VALUE, Integer.MAX_VALUE,1);
         }
@@ -227,8 +227,10 @@ public class Tree {
                     else{
                         t = new Leaf(newSituation, 0);
                     }
-                    t.setPos(pos);
-                    ((Node) cn).addChildren(t);
+                    if (depth == 1) {
+                        t.setPos(pos);
+                        ((Node) cn).addChildren(t);
+                    }
                     //On check la condition alpha beta
                     v = Math.min(v,alphabeta3D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
@@ -264,8 +266,10 @@ public class Tree {
                     else{
                         t = new Leaf(newSituation, 0);
                     }
-                    t.setPos(pos);
-                    ((Node) cn).addChildren(t);
+                    if (depth == 1) {
+                        t.setPos(pos);
+                        ((Node) cn).addChildren(t);
+                    }
                     //On check la condition alpha beta
                     v = Math.max(v,alphabeta3D(t,alpha,beta,depth+1));
                     //Si elle est validé on retounre la valeur
