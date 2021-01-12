@@ -81,7 +81,7 @@ public class Main {
         char player =' ';
         String response = "";
         while(!(response.equals("Y")) && !(response.equals("N")) ) {
-            System.out.println("Voulez vous commncez une nouvelle partie ou reprendre une partie ? Y/N");
+            System.out.println("Voulez-vous commencer une nouvelle partie ou reprendre une partie ? (Y/N)");
             response = sc.nextLine();
             if (response.equals("Y")) {
                 String file = "";
@@ -113,7 +113,7 @@ public class Main {
             }
         }
         while (true) {
-            System.out.println("Voulez vous jouez contre une IA (Y/N)");
+            System.out.println("Voulez-vous jouez contre une IA (Y/N) ?");
             response = sc.nextLine();
             if(response.equals("Y") || response.equals("N")){
                 ia = response.equals("Y");
@@ -121,7 +121,7 @@ public class Main {
             }
         }
         while (true) {
-            System.out.println("Voulez vous jouez les X ou les O");
+            System.out.println("Voulez-vous jouez les X ou les O ?");
             response = sc.nextLine();
             if(response.equals("X") || response.equals("O")){
                 player = response.charAt(0);
@@ -217,7 +217,7 @@ public class Main {
     public static int playerPlay(int dim){
         int line,column,depth;
         while(true) {
-            System.out.print("Selectionner votre ligne (1 à 4) :");
+            System.out.print("Selectionnez votre ligne (1 à 4) :");
             try {
                 line = Integer.parseInt(sc.nextLine());
                 if (line >= 1 && line <= 4)
@@ -231,7 +231,7 @@ public class Main {
             }
         }
         while(true) {
-            System.out.print("Selectionner votre colonne (1 à 4) :");
+            System.out.print("Selectionnez votre colonne (1 à 4) :");
             try {
                 column = Integer.parseInt(sc.nextLine());
                 if (column >= 1 && column <= 4)
@@ -247,7 +247,7 @@ public class Main {
         depth =1;
         if(dim == 3){
             while(true) {
-                System.out.print("Selectionner votre profondeur (1 à 4) :");
+                System.out.print("Selectionnez votre profondeur (1 à 4) :");
                 try {
                     depth = Integer.parseInt(sc.nextLine());
                     if (depth >= 1 && depth <= 4)
