@@ -1,7 +1,6 @@
 package ui;
 
 import alphabeta.Tree;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -18,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import tictactoe.StructureTicTacToe;
 import tictactoe.TicTacToe_2D;
 import tictactoe.TicTacToe_3D;
@@ -27,10 +28,12 @@ import utilities.TicTacToeUtilities;
 import utilities.Utilities;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
@@ -109,7 +112,7 @@ public class LaunchController implements Initializable {
         });
 
         fetchBoards("2D");
-
+        handleComboBoxChange();
         linkRadioButtons();
         initializeTicTacToe();
         createTictactoe2D();
@@ -548,6 +551,53 @@ public class LaunchController implements Initializable {
         radioButton2D.setToggleGroup(dimensionGroup);
         radioButton2D.setSelected(true);
         radioButton3D.setToggleGroup(dimensionGroup);
+    }
+
+    private void handleComboBoxChange() {
+        comboBoxFiles.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue != null && newValue.toLowerCase().equals("import custom board...")) {
+                Stage stage = (Stage) parent.getScene().getWindow();
+                FileChooser fileChooser = new FileChooser();
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                fileChooser.getExtensionFilters().add(extFilter);
+                fileChooser.setTitle("Import custom board");
+                File file = fileChooser.showOpenDialog(stage);
+                if (file != null) {
+                    boolean correctName = dimensionGroup.getSelectedToggle().equals(radioButton2D) ? file.getName().startsWith("2D_") : file.getName().startsWith("3D_");
+                    if (correctName) {
+                        boolean fileAlreadyExists = false;
+                        for (Map.Entry<String, File> entry : files.entrySet()) {
+                            if (entry.getValue().getName().equals(file.getName())) {
+                                fileAlreadyExists = true;
+                                break;
+                            }
+                        }
+                        if (fileAlreadyExists) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Failed to import board");
+                            alert.setHeaderText("This file name already exists.");
+                            alert.showAndWait();
+                        } else {
+                            String dimension = dimensionGroup.getSelectedToggle().equals(radioButton2D) ? "2D" : "3D";
+                            File newFile = new File(String.format("files/%s/%s", dimension, file.getName()));
+                            try {
+                                Files.copy(file.toPath(), newFile.toPath());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            fetchBoards(dimension);
+                        }
+
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Failed to import board");
+                        alert.setHeaderText("Your file name must start with either \"2D_\" or \"3D_\", depending on the chosen dimension.");
+                        alert.showAndWait();
+                    }
+                }
+                comboBoxFiles.getSelectionModel().selectFirst();
+            }
+        });
     }
 
     /**
