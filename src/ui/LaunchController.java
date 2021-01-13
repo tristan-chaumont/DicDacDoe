@@ -31,10 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class LaunchController implements Initializable {
@@ -359,6 +357,14 @@ public class LaunchController implements Initializable {
             boardArray = new char[(int) Math.pow(4, 3)];
             stagesSelected = new boolean[]{true, false, false, false};
         }
+        /*ticTacToe.getEmptyCell();
+        String stringBoard = String.valueOf(ticTacToe.getCells());
+        int nbCross = (int) stringBoard.chars().mapToObj(c -> (char) c).collect(Collectors.toList()).stream().filter(v -> v == 'X').count();
+        int nbCircles = (int) stringBoard.chars().mapToObj(c -> (char) c).collect(Collectors.toList()).stream().filter(v -> v == 'O').count();
+
+        if (Math.abs(nbCross - nbCircles) > 1) {
+            //TODO lever une erreur
+        }*/
 
         for (int i = 0; i < boardList.size(); i++) {
             switch (boardList.get(i)) {
