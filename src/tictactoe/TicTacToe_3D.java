@@ -164,6 +164,23 @@ public class TicTacToe_3D extends StructureTicTacToe {
             nbX = 0;
             nbO = 0;
         }
+        for(int i = 0;i<16;i++) {
+            for (int j = i; j < 64; j=j+16) {
+                if (this.cells[j] == x) {
+                    nbX++;
+                }else if (this.cells[j] == o) {
+                    nbO++;
+                }
+            }
+            if (nbX > 0 && nbO == 0 ){
+                eval += heuristic[nbX];
+            }
+            else if (nbO > 0 && nbX == 0 ){
+                eval -= heuristic[nbO];
+            }
+            nbX = 0;
+            nbO = 0;
+        }
         for(int i =0;i < diagonalState.length;i++){
             for (int j=0;j<4;j++){
                 if (this.cells[diagonalState[i][j]] == x) {
