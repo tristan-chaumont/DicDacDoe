@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public abstract class StructureTicTacToe {
 
-    protected static int[]  heuristic = {0,1,3,7,9999};
+    protected static int[]  heuristic = {0,1,3,9,9999};
     protected char [] cells;
     protected ArrayList<Integer> emptyCell;
     protected ArrayList<Integer> winningCells;

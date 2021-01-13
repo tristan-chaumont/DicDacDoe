@@ -527,7 +527,6 @@ public class LaunchController implements Initializable {
                 leftIcon = IconsUtilities.makeGroupCircle(0.021, 0.021);
                 ticTacToe.setCell('O', aiRow + 1, aiColumn + 1, aiDepth + 1);
             }
-            System.out.println(ticTacToe);
             writeMoveInformation(aiRow, aiColumn, aiDepth);
             if (dimensionGroup.getSelectedToggle().equals(radioButton2D)) {
                 ((StackPane) currentStage.getChildren().get(aiColumn + (aiRow * 4))).getChildren().add(rightIcon);

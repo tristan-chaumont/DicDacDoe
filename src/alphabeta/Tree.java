@@ -25,11 +25,11 @@ public class Tree {
         dimension = dim;
         duplicate = new HashMap<>();
         player = p;
-        long truc = (long)Math.pow(4,dim);
+        long nbCase = (long)Math.pow(4,dim);
         int i = 0;
-        long produit = truc;
-        while(produit < 1000000000){
-            produit *= --truc;
+        long produit = nbCase;
+        while(produit < 10000000000L){
+            produit *= --nbCase;
             //System.out.println(produit);
             i++;
         }
@@ -61,7 +61,7 @@ public class Tree {
         long truc = sttt.getEmptyCell().size();
         int i = 0;
         long produit = truc;
-        while(produit < 1000000000 && truc > 1){
+        while(produit < 10000000000L && truc > 1){
             produit *= --truc;
             //System.out.println(produit);
             i++;
@@ -70,7 +70,6 @@ public class Tree {
             i--;
         }
         maxDepth = i;
-        maxDepth = 5;
         String typePlayer;
         if(player == 'X') {
             typePlayer = "max";
@@ -107,9 +106,6 @@ public class Tree {
             if(((Node)cn).getType().equals("min")) {
                 //On veut créer tous les fils sauf si condition alpha >= beta validée
                 v = Integer.MAX_VALUE;
-                if(size == 1) {
-
-                }
                 for (int i = 0; i < size; i++) {
                     //Création de la nouvelle situation
                     int pos = emptyCells.get(i);
@@ -124,12 +120,12 @@ public class Tree {
                         //System.out.println(val);
                         t = new Leaf(newSituation,val);
                     }
-                    //Sinon on applique la récursivité
+                    //Sinon on crée un nœud
                     else{
                         t = new Node(newSituation, "max");
 
                     }
-
+                    // On applique la récursivité
                     t.setPos(pos);
                     ((Node) cn).addChildren(t);
                     //On check la condition alpha beta
