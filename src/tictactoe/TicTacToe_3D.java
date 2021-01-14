@@ -146,6 +146,7 @@ public class TicTacToe_3D extends StructureTicTacToe {
             nbO = 0;
         }
         int begin;
+        // parcours de la colonne
         for(int i = 0;i<16;i++) {
             begin = i%4+16*(i/4);
             for (int j = begin; j < begin+12; j=j+4) {
@@ -164,6 +165,7 @@ public class TicTacToe_3D extends StructureTicTacToe {
             nbX = 0;
             nbO = 0;
         }
+        // parcours en profondeur
         for(int i = 0;i<16;i++) {
             for (int j = i; j < 64; j=j+16) {
                 if (this.cells[j] == x) {
@@ -181,6 +183,7 @@ public class TicTacToe_3D extends StructureTicTacToe {
             nbX = 0;
             nbO = 0;
         }
+        // parcours de la dialgonnale
         for(int i =0;i < diagonalState.length;i++){
             for (int j=0;j<4;j++){
                 if (this.cells[diagonalState[i][j]] == x) {
