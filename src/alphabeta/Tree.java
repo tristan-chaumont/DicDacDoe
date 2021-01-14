@@ -277,7 +277,6 @@ public class Tree {
 
     public int nextStep(){
         int val = root.getValue();
-        //System.out.println(root.getValue());
         for(TreeNode t : root.getChildren()){
             if (t.getValue() == val){
                 return t.getPos();
