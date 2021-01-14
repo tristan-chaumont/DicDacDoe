@@ -136,10 +136,6 @@ public class Main {
         else{
             turn2Player(sttt,firstToPlay,dim);
         }
-
-
-
-
     }
 
     public static void turn2Player(StructureTicTacToe sttt,char player,int dim){

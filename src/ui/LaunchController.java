@@ -584,7 +584,7 @@ public class LaunchController implements Initializable {
                             alert.showAndWait();
                         } else {
                             String dimension = dimensionGroup.getSelectedToggle().equals(radioButton2D) ? "2D" : "3D";
-                            File newFile = new File(String.format("files/%s/%s", dimension, file.getName()));
+                            File newFile = new File(String.format("src/files/%s/%s", dimension, file.getName()));
                             try {
                                 Files.copy(file.toPath(), newFile.toPath());
                             } catch (IOException e) {
@@ -615,7 +615,7 @@ public class LaunchController implements Initializable {
         if (!comboBoxFiles.getItems().isEmpty()) {
             comboBoxFiles.getItems().clear();
         }
-        File directory = new File("files/" + dimension);
+        File directory = new File("src/files/" + dimension + "/");
         Utilities.fetchFiles(directory, file -> {
             String fileName = String.join(" ", file.getName().substring(0, file.getName().length() - 4).split("_"));
             comboBoxFiles.getItems().add(fileName);
