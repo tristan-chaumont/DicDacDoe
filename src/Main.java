@@ -23,53 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         lauchGame();
-        int dimension;
 
-        dimension = chooseDimension();
-
-        ArrayList<Integer> board = Utilities.parseBoard(dimension, "files/3D/3D_Empty.txt");
-
-        char [] tictactoe = Utilities.boardToTicTacToe(dimension,board);
-        TicTacToe_3D game = new TicTacToe_3D(tictactoe);
-        /*
-        System.out.println(game.heuristicEval());
-*/
-        Tree tree = new Tree(3,'X');
-        System.out.println("tree");
-
-        game.setCell('X',tree.nextStep());
-
-        tree = new Tree(3,'O',game);
-        game.setCell('O',tree.nextStep());
-
-        tree = new Tree(3,'X',game);
-        game.setCell('X',tree.nextStep());
-        tree = new Tree(3,'O',game);
-        game.setCell('O',tree.nextStep());
-        tree = new Tree(3,'X',game);
-        game.setCell('X',tree.nextStep());
-        tree = new Tree(3,'O',game);
-        game.setCell('O',tree.nextStep());
-        System.out.println(game);/*
-        tree = new Tree(2,'X',game);
-        game.setCell('X',tree.nextStep());
-
-        System.out.println(tree.getRoot().getValue());*/
-        // Test de Tristan
-        //System.out.println(game);
-        //StructureTicTacToe game = new TicTacToe_3D(tictactoe);
-        //System.out.println(game);
-
-        /*int j = 1;
-        ArrayList<Integer> board3D = Utilities.parseBoard(3, "files/3D/3D_Empty.txt");
-        for (Integer integer : board3D) {
-            System.out.print(integer + " ");
-            if(j==4) {
-                System.out.println();
-                j = 0;
-            }
-            j+=1;
-        }*/
     }
 
 
